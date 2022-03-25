@@ -1,0 +1,139 @@
+{%block content%}
+<div class="modal-dialog">
+	<div class="modal-content">
+		<div class="modal-header">
+			<h2 class="modal-title"> Editar actividad</h2>
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+			</div>
+
+			<div class="content">
+            <div class="col-12 pt-3 pb-3" id="profile-box">
+              <div class="card-title py-3">
+			<form action="{% url 'gestion:crea_sub_actividad' object.id %}" method="post" >
+				
+
+			<div class="modal-body modal-body-sub_agile">
+				<div class="col-md-8 modal_body_left modal_body_left1">
+				<div class="form-grup">
+
+					{% if form.errors %}
+       {% for field in form %}
+           {% for error in field.errors %} 
+              <div class="alert alert-danger">
+                   <strong>{{ error|escape }}</strong>
+              </div>
+           {% endfor %}
+       {% endfor %}
+    {% endif %}
+
+					
+                        
+                {% csrf_token %}
+
+          
+
+				<div class="form-group">
+					<label for="formGroupExampleInput">Numero sub Actividad</label>
+					<input type="number" class="form-control" name="num_actividad" >
+				  </div>
+
+				  <div class="form-group">
+					<label for="formGroupExampleInput">Nombre sub Actividad</label>
+					<input type="text" onkeydown="return validarLetras(event)" class="form-control" name="nom_actividad" >
+				  </div>
+				  <p>{{ form.nom_actividad.errors.as_text }}</p>
+
+
+				
+
+
+				  <div class="form-group">
+					<label for="formGroupExampleInput">Fecha Inicio</label>
+					<input type="date" class="form-control" name="fecha_inicio" >
+				  </div>
+
+
+				  <div class="form-group">
+					<label for="formGroupExampleInput">Fecha Fin Aproximado</label>
+					<input type="date" class="form-control" name="fecha_fin" >
+				  </div>
+
+
+				  <div class="form-group">
+					<label for="formGroupExampleInput">Fecha rEAL</label>
+					<input type="date" class="form-control" name="fecha_real" >
+				  </div>
+
+				  <div class="form-group">
+					<label for="formGroupExampleInput">Impacto</label>
+					<input type="text" onkeydown="return validarLetras(event)" class="form-control" name="impacto" >
+				  </div>
+
+				  <div class="form-group">
+					<label for="formGroupExampleInput">Punto Critico</label>
+					<input type="text" onkeydown="return validarLetras(event)" class="form-control" name="punto_critico" >
+				  </div>
+
+                        
+                  
+               
+
+							
+
+								
+
+
+
+							
+</div>
+				
+
+			</div>
+			
+				<button class="btn btn-danger" type="button" data-dismiss="modal"> Cancelar</button>
+				<button class="btn btn-primary" type="submit" > Aprobar</button>
+				
+
+			
+
+			</form>
+			</div>
+			</div>
+			</div>
+				
+		
+
+
+
+	</div>
+	
+
+
+
+
+
+</div>
+</div>
+
+<script>
+
+// funcion que hace que solo se permitan letras 
+function validarLetras(e) { // 1
+    tecla = (document.all) ? e.keyCode : e.which; 
+    if (tecla==8) return true; // backspace
+        if (tecla==32) return true; // espacio
+        if (e.ctrlKey && tecla==86) { return true;} //Ctrl v
+        if (e.ctrlKey && tecla==67) { return true;} //Ctrl c
+        if (e.ctrlKey && tecla==88) { return true;} //Ctrl x
+ 
+        patron = /[a-zA-Z]/; //patron
+ 
+        te = String.fromCharCode(tecla); 
+        return patron.test(te); // prueba de patron
+    }
+    
+</script>
+
+{%endblock content%}

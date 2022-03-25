@@ -1,0 +1,104 @@
+{% extends "corpoelec.html" %}
+
+
+
+
+{%block content%}
+
+   
+    <ul class="list-group">
+        <li class="list-group-item active">Actividad</li>
+
+        <li class="list-group-item">Numero de actividad : {{object.num_actividades}}</li>
+        <li class="list-group-item">Nombre de actividad : {{object.nom_actividades}}</li>
+
+        <li class="list-group-item"> Indicadores:  {{object.indicadores}}</li>
+        <li class="list-group-item"> Costo : {{object.costo}}</li>
+
+        <li class="list-group-item"> avance : {{object.avance_1}}</li>
+        <li class="list-group-item">Alcance : {{object.alcance}}</li>
+
+    
+      </ul>
+
+      <br>
+      <br>
+      <h4 style="text-align: center; color: black; ">Sub Actividades </h4>
+      <br>
+      <br>
+
+
+      <button class="btn btn-success" onclick="crear_subActividad_modal('{% url 'gestion:crea_sub_actividad' object.id %}')">crear sub actv</button>
+
+
+
+
+      <table class="table">
+        <thead class="bg-primary">
+          <tr>
+            
+            <th scope="col" style="color: blanchedalmond;">numero</th>
+            <th scope="col" style="color: blanchedalmond;">nombre</th>
+            <th scope="col" style="color: blanchedalmond;">inicio</th>
+            <th scope="col" style="color: blanchedalmond;">fin</th>
+            <th scope="col" style="color: blanchedalmond;">fin real</th>
+            <th scope="col" style="color: blanchedalmond;">impacto</th>
+            <th scope="col" style="color: blanchedalmond;">punto critico</th>
+            <th scope="col" style="color: blanchedalmond;">accion </th>
+            
+          </tr>
+        </thead>
+        <tbody>
+            {% for dato in info %}
+          <tr>
+          
+            <td>{{dato.num_actividad}}</td>
+            <td>{{dato.nom_actividad}}e</td>
+            <td>{{dato.fecha_inicio}}</td>
+            <td>{{dato.fecha_fin}}</td>
+            <td>{{dato.fecha_real}}</td>
+            <td>{{dato.impacto}}</td>
+            <td>{{dato.punto_critico}}</td>
+            <td>
+
+              <a class="btn btn-success" href="{% url 'gestion:editar_subActividad' dato.id object.id %}">editar</a>
+
+              <a class="btn btn-danger" href="{% url 'gestion:eliminar_subActividad' dato.id  object.id %}">aliminar</a>
+              
+            </td>
+          </tr>
+          {% endfor %}
+         
+        </tbody>
+      </table>
+
+
+<div class="modal fade" id="crear_subActividad" role="dialog">
+                                            
+
+
+</div>
+
+<script type="text/javascript">
+    
+
+        
+      function crear_subActividad_modal (url){
+        
+        $('#crear_subActividad').load(url , function(){
+      
+            $(this).modal("show");
+      
+        })
+      
+      }
+        
+        
+        
+</script> 
+      
+      
+      
+
+
+{%endblock content%}

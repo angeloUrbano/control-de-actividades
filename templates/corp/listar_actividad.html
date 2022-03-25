@@ -1,0 +1,136 @@
+{% extends "corpoelec.html" %}
+
+
+
+{%block content%}
+
+
+<div class="content">
+
+    <table class="table">
+        <thead class="thead-dark">
+          <tr>
+            
+            <th>Nro actividad </th>
+            <th>Nom ACtividad </th>
+            
+           
+            <th>Avance </th>
+            
+            <th>Estado</th>
+            <th>detalle</th>
+            
+            <th style="text-align: center;">accion</th>
+            <th>Crear Sub Actividad</th>
+            
+          </tr>
+        </thead>
+        <tbody>
+
+            {% if object_list %}
+
+
+            {% for datos in object_list %}
+          <tr >
+            
+            <td>{{datos.num_actividades}}</td>
+            <td>{{datos.nom_actividades}}</td>
+            
+
+          
+            <td>{{datos.avance_1}} %</td>
+            
+            <td>{{datos.id_estado2}}</td>
+            <td>
+                <a href="{% url 'gestion:detalle_actividad' datos.id %}"  class="btn btn-info" > detalle</a>
+            </td>
+            <td>
+               
+
+                <button class="btn btn-primary" onclick="editar_actividad_modal('{% url 'gestion:editar_actividads' datos.id  %}')">Editar</button>
+                <button  type="button" class="btn btn-danger" onclick="eliminar_actividad_modal('{% url 'gestion:eliminar_actividad' datos.id  %}')">Eliminar</button>
+     
+            </td>
+            <td>
+              <button class="btn btn-success" onclick="crear_subActividad_modal('{% url 'gestion:crea_sub_actividad' datos.id %}')">crear sub actv</button>
+            </td>
+          </tr>
+
+          {% endfor %}
+          {% endif %}
+        </tbody>
+      </table> 
+    
+    
+      
+
+
+</div>
+
+
+<div class="modal fade" id="editar" role="dialog">
+                                            
+
+
+</div>
+
+
+
+<div class="modal fade" id="eliminar" role="dialog">
+                                            
+
+
+</div>
+
+<div class="modal fade" id="crear_subActividad" role="dialog">
+                                            
+
+
+</div>
+ 
+
+  
+<script type="text/javascript">
+    
+
+  function editar_actividad_modal (url){
+  
+          $('#editar').load(url , function(){
+  
+              $(this).modal("show");
+  
+          })
+  
+      }
+
+
+
+function eliminar_actividad_modal (url){
+  
+  $('#eliminar').load(url , function(){
+
+      $(this).modal("show");
+
+  })
+
+}
+function crear_subActividad_modal (url){
+  
+  $('#crear_subActividad').load(url , function(){
+
+      $(this).modal("show");
+
+  })
+
+}
+  
+  
+  
+  </script> 
+  
+  
+
+
+
+
+{%endblock content%}
