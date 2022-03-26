@@ -44,10 +44,16 @@ def login_view(request):
 			login(request , User)
            
 			
-			return redirect('data:registro')
+			return redirect('gestion:lista_actividades')
 		else:
 			return render(request , "corp/login.html" , {'error': 'Correo o Contraseña Invalido'})	
 	return render(request , "corp/login.html")
+
+
+@login_required
+def logout_view(request):
+	logout(request)
+	return redirect('login')    
 
 
 

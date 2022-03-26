@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from django.contrib import admin
-from .models import activ_principal, sud_actividad, estados, Profile
+from .models import activ_principal, sud_actividad, estados
 
 
 class activ_principalAdmin(admin.ModelAdmin):
@@ -18,10 +18,10 @@ class estadosAdmin(admin.ModelAdmin):
 
 
 
-class profileAdmin(admin.ModelAdmin):
+"""class profileAdmin(admin.ModelAdmin):
 
 
-    search_fields=['nombre']
+    search_fields=['nombre']"""
   
 
 
@@ -38,5 +38,5 @@ admin.site.register(activ_principal, activ_principalAdmin)
 admin.site.register(sud_actividad, estadosAdmin)
 admin.site.register(estados)
 
-admin.site.register(Profile, profileAdmin)
+#admin.site.register(Profile, profileAdmin)
 

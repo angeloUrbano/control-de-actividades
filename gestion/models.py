@@ -10,8 +10,27 @@ from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
 
 
+from django.contrib.auth.models import AbstractUser
 
-class Profile(models.Model):
+
+
+
+
+class User(AbstractUser):
+	email = models.EmailField(unique=True)
+	USERNAME_FIELD = 'email'
+	REQUIRED_FIELDS=[ 'username'  ,'first_name' , 'last_name'] 
+
+
+
+
+
+	def __str__(self):
+		return '{}'.format(self.email)
+
+
+
+"""class Profile(models.Model):
    user = models.OneToOneField(User, on_delete=models.CASCADE)
    nombre = models.CharField(max_length= 50)
    apellido = models.CharField(max_length= 50)
@@ -23,7 +42,7 @@ class Profile(models.Model):
 
    def __str__(self):
       return '{}'.format(self.user.username) 
-
+"""
 
 
 class estados (models.Model):
