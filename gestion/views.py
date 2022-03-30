@@ -103,10 +103,16 @@ class crear_usuario(View):
             last_name = datos_limpios['last_name']
             password = datos_limpios['password']
             password_confirmation = datos_limpios['password_confirmation']
-
+            cedula= datos_limpios['cedula']
+            nombre_corporativo= datos_limpios['nombre_corporativo']
+            estado= datos_limpios['estado']
+            cargo = datos_limpios['cargo']
+            
 
             User = get_user_model()
-            User = User.objects.create_user(username=first_name, email=email , last_name =last_name , password = password , is_active = True)
+            User = User.objects.create_user(username=first_name, email=email , last_name =last_name , password = password , is_active = True ,
+            cedula =cedula , nombre_corporativo = nombre_corporativo , estado =estado ,
+            cargo = cargo)
             for x in datos_limpios['groups']:
 
                 User.groups.add(x)

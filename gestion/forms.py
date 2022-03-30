@@ -30,7 +30,8 @@ class Crea_Usuario(forms.ModelForm):
 		model=User
 	
 
-		fields=['email','first_name','last_name','groups' , 'password']
+		fields=['email','first_name','last_name','groups'  ,
+		'cedula' ,'nombre_corporativo' , 'estado'  , 'cargo' , 'password']
 
 		
 
@@ -39,8 +40,13 @@ class Crea_Usuario(forms.ModelForm):
 			'email':'correo',
 			'first_name':'Nombre',
 			'last_name':'Apellido',
+			'cedula': 'Cedula',
+			'nombre_corporativo' :'Nombre Corporativo' ,
+			'estado':'Estado',
+			'cargo':'Cargo',
 			'groups':'gupos',
-			'password':'password',
+
+			'password':'password'
 		}
 
 
@@ -49,11 +55,93 @@ class Crea_Usuario(forms.ModelForm):
 		'email': forms.EmailInput(attrs={'class':'form-control'}),
 		'first_name': forms.TextInput(attrs={'class':'form-control'}),
 		'last_name': forms.TextInput(attrs={'class':'form-control'}),
+
+		'cedula': forms.TextInput(attrs={'class':'form-control'}),
+		'nombre_corporativo': forms.TextInput(attrs={'class':'form-control'}),
+		'estado': forms.Select(attrs={'class':'form-control'}),
+		'cargo': forms.TextInput(attrs={'class':'form-control'}),
+
+
 		'groups': forms.SelectMultiple(attrs={'class':'form-control'}),
+
 		'password': forms.PasswordInput(attrs={'class':'form-control'}),
 		
 		}
 
+
+	def clean_first_name(self):
+
+		#patron = re.compile("^\w+$")
+		first_name = self.cleaned_data.get('first_name')
+		
+		
+		if not re.match(r'[a-zA-Z\s]+$', first_name) or first_name == "":
+			
+			raise forms.ValidationError("debe ser solo letras y  es un campo obligatorio")
+
+		
+		return first_name
+
+
+	def clean_last_name(self):
+
+		#patron = re.compile("^\w+$")
+		last_name = self.cleaned_data.get('last_name')
+		
+		
+		if not re.match(r'[a-zA-Z\s]+$', last_name) or last_name == "":
+			
+			raise forms.ValidationError("debe ser solo letras y  es un campo obligatorio")
+
+		
+		return last_name
+
+
+	def clean_cedula(self):
+
+		#patron = re.compile("^\w+$")
+		cedula = self.cleaned_data.get('cedula')
+		
+		
+		if not re.match(r'\d+$', cedula) or len(cedula)>8:
+			
+			raise forms.ValidationError("Error! solo debe ser numero y un maximo de 8 caracteres")
+
+		
+		return cedula	
+
+	def clean_nombre_corporativo(self):
+
+		#patron = re.compile("^\w+$")
+		nombre_corporativo = self.cleaned_data.get('nombre_corporativo')
+		
+		
+		if not re.match(r'[a-zA-Z\s]+$', nombre_corporativo) or nombre_corporativo == "":
+			
+			raise forms.ValidationError("debe ser solo letras y  es un campo obligatorio")
+
+		
+		return nombre_corporativo	
+
+
+
+	def clean_cargo(self):
+
+		#patron = re.compile("^\w+$")
+		cargo = self.cleaned_data.get('cargo')
+		
+		
+		if not re.match(r'[a-zA-Z\s]+$', cargo) or cargo == "":
+			
+			raise forms.ValidationError("debe ser solo letras y  es un campo obligatorio")
+
+		
+		return cargo	
+
+	
+			
+	
+		
 
 
 
@@ -83,7 +171,7 @@ class Crea_Usuario(forms.ModelForm):
 		password_confirmation = data['password_confirmation']
 
 		if password != password_confirmation:
-			raise forms.ValidationError('Passwords do not match')
+			raise forms.ValidationError('Las contrañas no coninciden ')
 
 		return data	
 
@@ -166,7 +254,7 @@ class sud_actividadForm(forms.Form):
 		
 		
 		if not re.match(r'[a-zA-Z\s]+$', nom_actividad):
-			print("no coniside")
+			
 			raise forms.ValidationError("debe ser solo letras")
 
 		
@@ -179,7 +267,7 @@ class sud_actividadForm(forms.Form):
 		
 		
 		if not re.match(r'[a-zA-Z\s]+$', impacto):
-			print("no coniside")
+			
 			raise forms.ValidationError("debe ser solo letras")
 
 		
@@ -192,7 +280,7 @@ class sud_actividadForm(forms.Form):
 		
 		
 		if not re.match(r'[a-zA-Z\s]+$', punto_critico):
-			print("no coniside")
+			
 			raise forms.ValidationError("debe ser solo letras")
 
 		
@@ -306,7 +394,7 @@ class sud_actividadForm2(forms.ModelForm):
 		
 		
 		if not re.match(r'[a-zA-Z\s]+$', nom_actividad):
-			print("no coniside")
+			
 			raise forms.ValidationError("debe ser solo letras")
 
 		
@@ -319,7 +407,7 @@ class sud_actividadForm2(forms.ModelForm):
 		
 		
 		if not re.match(r'[a-zA-Z\s]+$', impacto):
-			print("no coniside")
+			
 			raise forms.ValidationError("debe ser solo letras")
 
 		
@@ -332,7 +420,7 @@ class sud_actividadForm2(forms.ModelForm):
 		
 		
 		if not re.match(r'[a-zA-Z\s]+$', punto_critico):
-			print("no coniside")
+			
 			raise forms.ValidationError("debe ser solo letras")
 
 		

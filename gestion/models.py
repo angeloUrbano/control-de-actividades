@@ -13,13 +13,43 @@ from django.core.validators import RegexValidator
 from django.contrib.auth.models import AbstractUser
 
 
-
+STATE_CHOICES = (
+    ('Amazonas', 'Amazonas'),
+    ('Anzoátegui', 'Anzoátegui'),
+	('Apure', 'Apure'),
+	('Aragua', 'Aragua'),
+	('Barinas', 'Barinas'),
+	('Bolívar', 'Bolívar'),
+	('Carabobo', 'Carabobo'),
+	('Cojedes', 'Cojedes'),
+	('Delta Amacuro', 'Delta Amacuro'),
+	('Distrito' , 'Distrito'),
+	('Falcón', 'Falcón'),
+	('Guárico', 'Guárico'),
+	('Lara', 'Lara'),
+	('Mérida', 'Mérida'),
+	('Miranda', 'Miranda'),
+	('Monagas', 'Monagas'),
+	('Nueva Esparta', 'Nueva Esparta'),
+	('Portuguesa' , 'Portuguesa'),
+	('Sucre', 'Sucre'),
+	('Táchira' , 'Táchira'),
+	('Trujillo', 'Trujillo'),
+	('Vargas', 'Vargas'),
+	('Yaracuy', 'Yaracuy'),
+	('Zulia', 'Zulia')
+)
 
 
 class User(AbstractUser):
     email = models.EmailField(unique=True)
+    cedula = models.CharField(max_length=100 , blank=False, null= False)
+    nombre_corporativo = models.CharField(max_length=100 , blank=False, null= False)
+    estado = models.CharField(choices=STATE_CHOICES, max_length=20 , blank=False, null= False)
+    cargo= models.CharField(max_length=100 , blank=False, null= False )
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS=[ 'first_name' , 'last_name']
+    REQUIRED_FIELDS=[ 'username',  'first_name' , 'last_name'  , 'cedula' , 'nombre_corporativo' , 
+    'estado' , 'cargo']
 
     
 
