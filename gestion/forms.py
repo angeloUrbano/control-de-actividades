@@ -2,6 +2,7 @@ from django import forms
 from django.db.models import fields
 from django.forms import widgets
 import re
+from django.contrib.auth.models import User
 from datetime import date, time, datetime
 
 
@@ -10,6 +11,89 @@ from django.core.exceptions import ValidationError
 
 from .validators import letras_solo
 
+
+
+from django.contrib.auth import get_user_model
+
+
+
+class Crea_Usuario(forms.ModelForm):
+	
+	password_confirmation = forms.CharField(max_length=70 , widget=forms.PasswordInput(
+		attrs={'class':'form-control'}
+	))
+
+
+	class Meta:
+		User = get_user_model()
+
+		model=User
+	
+
+		fields=['email','first_name','last_name','groups' , 'password']
+
+		
+
+
+		labels={
+			'email':'correo',
+			'first_name':'Nombre',
+			'last_name':'Apellido',
+			'groups':'gupos',
+			'password':'password',
+		}
+
+
+		widgets = {
+
+		'email': forms.EmailInput(attrs={'class':'form-control'}),
+		'first_name': forms.TextInput(attrs={'class':'form-control'}),
+		'last_name': forms.TextInput(attrs={'class':'form-control'}),
+		'groups': forms.SelectMultiple(attrs={'class':'form-control'}),
+		'password': forms.PasswordInput(attrs={'class':'form-control'}),
+		
+		}
+
+
+
+
+		
+	
+	
+	"""The problem is that User refers to django.contrib.auth.models.User 
+	and now you have got a Custom User pet.Person assuming you have in the settings.py
+	you have to define User with the Custom User model and you can do this with
+	get_user_model at the top of the file where you use User"""
+
+	User = get_user_model()
+	def clean_email(self):
+
+		email = self.cleaned_data['email']
+		q = self.User.objects.filter(email=email).exists()
+		if q:
+		
+			raise forms.ValidationError('Email ya esta en uso') 
+
+		return email	
+
+	def clean(self):
+		data = super().clean()
+
+		password= data['password']
+		password_confirmation = data['password_confirmation']
+
+		if password != password_confirmation:
+			raise forms.ValidationError('Passwords do not match')
+
+		return data	
+
+	def save(self):
+		#esta funcion es para guardar los datos
+		data = self.cleaned_data
+		data.pop('password_confirmation')#este campo es para eliminar por que no lo necesito
+		user= User.objects.create_user(**data)
+		profile= Profile(user=user)
+		profile.save()
 
 
 

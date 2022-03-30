@@ -7,8 +7,9 @@ from django.urls import reverse
 from django.views.generic.edit import DeleteView, UpdateView
 from openpyxl.styles.fills import FILL_NONE
 
-from gestion.forms import activ_principalForm, sud_actividadForm , sud_actividadForm2
+from gestion.forms import activ_principalForm, sud_actividadForm , sud_actividadForm2 , Crea_Usuario
 from gestion.models import *
+from gestion.Mixins import validarPermisosRequeridosMixin
 from django.contrib.auth import authenticate, get_user_model
 
 from django.views.generic import View, UpdateView, CreateView,  DetailView, TemplateView , ListView , DeleteView
@@ -17,9 +18,15 @@ from django.contrib.auth.decorators import login_required
 
 from django.urls import  reverse_lazy
 
+
 from  openpyxl import Workbook, workbook
 from openpyxl.styles import  PatternFill, Border, Side, Alignment, Protection, Font, alignment
 from django.http.response import HttpResponse, StreamingHttpResponse
+
+
+
+
+from django.contrib.auth.mixins import PermissionRequiredMixin
 
 
 
@@ -31,7 +38,7 @@ def login_view(request):
 	
 	print(request.POST)
 	if request.method== 'POST':
-		print("error esta aqui")
+		
 		
 		username = request.POST['email']
 		password = request.POST['password']
@@ -40,7 +47,7 @@ def login_view(request):
         
 		print(User)
 		if User :
-			print("entro en la condicion")
+			
 			login(request , User)
            
 			
@@ -60,6 +67,58 @@ def logout_view(request):
 
 
 
+class crear_usuario(View):
+
+   
+    template_name = 'corp/signup.html'
+    form_class = Crea_Usuario
+
+
+
+
+    def get (self, request):
+
+        return render(request,self.template_name , {'form':self.form_class})
+
+
+    def post(self , request , *args , **kwargs):
+
+        form  = self.form_class(request.POST) 
+        
+
+        if form.is_valid():
+            print("aquiii ya pase el formularo valido")
+
+         
+
+            datos_limpios = form.cleaned_data
+
+          
+
+           
+
+           
+            email = datos_limpios['email']
+            first_name = datos_limpios['first_name']
+            last_name = datos_limpios['last_name']
+            password = datos_limpios['password']
+            password_confirmation = datos_limpios['password_confirmation']
+
+
+            User = get_user_model()
+            User = User.objects.create_user(username=first_name, email=email , last_name =last_name , password = password , is_active = True)
+            for x in datos_limpios['groups']:
+
+                User.groups.add(x)
+
+
+
+            """User.set_password(password)
+            User.is_active = True
+            User.save()"""
+            return redirect('gestion:lista_actividades')
+
+        return render(request , self.template_name , {'form':form})
 
 
 
@@ -81,7 +140,7 @@ class signup (View):
 
         
         nombre = request.POST['Nombre']
-        apellido = request.POST['Apellido']
+        last_name = request.POST['last_name']
         region = request.POST['estado']
         nivel = request.POST['nivel']
         
@@ -145,8 +204,9 @@ class muestra (TemplateView):
 
 
 
-class crear_actividad (CreateView):
-
+class crear_actividad (validarPermisosRequeridosMixin , CreateView):
+    permission_required = 'gestion.add_activ_principal'
+  
     model = activ_principal
     template_name = "corp/registro2.html"
     form_class =  activ_principalForm
@@ -242,7 +302,8 @@ class crear_sud_actividad(View):
 
 
 
-class lista_actividades(ListView):
+class lista_actividades(PermissionRequiredMixin, ListView):
+    permission_required = 'gestion.view_activ_principal'
     model = activ_principal
     template_name = "corp/listar_actividad.html"
 
@@ -258,8 +319,10 @@ class editar_actividad(UpdateView):
     
 
 
-class eliminar_actividad(DeleteView):
+class eliminar_actividad( PermissionRequiredMixin, DeleteView):
+    permission_required = 'gestion.delete_activ_principal'
     model = activ_principal
+
     template_name="corp/eliminar_actividad.html"
     success_url = reverse_lazy('gestion:lista_actividades')
 

@@ -18,7 +18,10 @@ urlpatterns = [
     path("crea_sub_actividad/<int:pk>" , crear_sud_actividad.as_view() , name="crea_sub_actividad"),
     path("editar_subActividad/<int:pk>/<int:pk2>/" , editar_sub_actividad.as_view() , name= "editar_subActividad"),
     path("eliminar_subActividad/<int:pk>/<int:pk2>/" , eliminar_sub_Actividad.as_view() , name= "eliminar_subActividad"),
-     
+
+
+    path("crear_user/", crear_usuario.as_view(), name="crear_user"),
+    
  
     
 ]

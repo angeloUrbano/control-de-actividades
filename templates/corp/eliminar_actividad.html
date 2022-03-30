@@ -14,7 +14,7 @@
 			<div class="row justify-content-md-center">
             <div class="col-6 pt-3 pb-3" id="profile-box">
               <div class="card-title py-3">
-			<form action="{% url 'gestion:editar_actividads' object.id %}" method="post" >
+			<form action="{% url 'gestion:eliminar_actividad' object.id %}" method="post" >
 				
 
 			<div class="modal-body modal-body-sub_agile">
@@ -22,7 +22,7 @@
 				<div class="form-grup">
 
 
-					
+					{% csrf_token %}
                         
                     <p><Em>Esta seguro que desea eliminar este elemento?</Em> "{{ object }}"?</p>
                     {{ form }}

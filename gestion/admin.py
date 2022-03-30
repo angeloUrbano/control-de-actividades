@@ -1,7 +1,8 @@
 from django.contrib import admin
 
 from django.contrib import admin
-from .models import activ_principal, sud_actividad, estados
+from .models import activ_principal, sud_actividad, estados , User
+from django.contrib.auth.models import Permission
 
 
 class activ_principalAdmin(admin.ModelAdmin):
@@ -37,6 +38,10 @@ admin.site.index_title ="Corpolec"
 admin.site.register(activ_principal, activ_principalAdmin)
 admin.site.register(sud_actividad, estadosAdmin)
 admin.site.register(estados)
+
+admin.site.register(User)
+
+admin.site.register(Permission)
 
 #admin.site.register(Profile, profileAdmin)
 

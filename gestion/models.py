@@ -17,16 +17,21 @@ from django.contrib.auth.models import AbstractUser
 
 
 class User(AbstractUser):
-	email = models.EmailField(unique=True)
-	USERNAME_FIELD = 'email'
-	REQUIRED_FIELDS=[ 'username'  ,'first_name' , 'last_name'] 
+    email = models.EmailField(unique=True)
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS=[ 'first_name' , 'last_name']
+
+    
+
+
+   
 
 
 
 
 
-	def __str__(self):
-		return '{}'.format(self.email)
+    def __str__(self):
+        return '{}'.format(self.email)
 
 
 
@@ -68,7 +73,7 @@ class estados (models.Model):
 
                                                                                                                                                                                                                                             
 
-    
+  
 
 class activ_principal(models.Model):
 
@@ -89,6 +94,9 @@ class activ_principal(models.Model):
     class Meta:
         verbose_name='actividad'
         verbose_name_plural='actividades'
+
+
+        
 
 
 

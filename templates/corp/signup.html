@@ -1,93 +1,70 @@
 
 {% extends "corpoelec.html" %}
 
+{% block titulo %}
 
-{% load static %}
+    <title> Actividades </title>
+    
+ {% endblock titulo %}}
 
-
-
-
-
-
-
-{% block content %} 
+{%block content%}
 
 
-
-{%  if error %}
-
-<p class="alert alert-danger">{{error}}</p>
-
-{%  endif  %}
-
-
-
-
-
-<div class="container">
-        <div class="row justify-content-md-center">
-            <div class="col-6 pt-3 pb-3" id="profile-box">
-              <div class="card-title py-3">
-                
-          <h2 style="text-align: center; font-family: cursive;" >Registro de Usuario</h2>
-        </div>
-        <div class="modal-body modal-spa">
-        <div class="form-grup">
-
-          <form method="post" action="{% url 'signup'%}">
-
-  {% csrf_token %}
-
-  <div class="form-grup">
-
-
-      <input style="text-align: left; font-family: cursive; margin-top: 5;" class="form-control" type="text" placeholder="Email" name="username">
-
-
-
-
-
-
-
-  <input style="text-align: left; font-family: cursive; margin-top: 5;" class="form-control" type="text" placeholder="Nombre" name="Nombre">
-
-
-  <input style="text-align: left; font-family: cursive; margin-top: 5;" class="form-control" type="text" placeholder="Apellido" name="Apellido">
-
-
-    <input style="text-align: left; font-family: cursive; margin-top: 5;" class="form-control" type="text" placeholder="Estado" name="estado">
-    <input style="text-align: left; font-family: cursive; margin-top: 5;" class="form-control" type="text" placeholder="Nivel" name="nivel">
-
-  <div class="form-grup">
-  <input  style="text-align: left; font-family: cursive; margin-top: 5;" class="form-control" type="password" placeholder="Password" name="password">
-  <div class="form-grup">
-  <input  style="text-align: left; font-family: cursive; margin-top: 5;" class="form-control" type="password" placeholder="Confirmar Password" name="password_confirmation">
-
+<div class="row justify-content-md-center ">
+  <div class="col-sm-6">
+    <div class="card">
+<div class="card">
   
-
-
+  <div class="card-body">
+    <h3 style="text-align: center; background-color: rgb(0, 68, 255); color:black;" class="card-header">Crear actividad </h3>
+    <p class="card-text">
+      
+    </p>
+    
+    
+          
+            
+     
   
+<form method="POST" >
 
-  </div>
+
+{% csrf_token %}
+
+
+{{form.as_p}}
+
+<!-- <div class="form-group"></div>
+{{form.as_p}}
+</div> -->
+    
   <button   style="border-radius: 15px; text-align: center; font-family: cursive" class="btn btn-success btn-block mt-5" type="submit">Crear Cuenta</button>
 
   
-
-
 </form>
 
- 
 
 
- 
+
+</div>
+</div>
+ </div>
+</div>
+  </div>
+</div>
+
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
   
-          </div>
-        </div>
-      </section>
-    </div>
-
-
-    
-  
-  </main>
-{% endblock %}
+{%endblock content%}
