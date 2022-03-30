@@ -1,5 +1,7 @@
+from django.http import request
 from django.shortcuts import redirect
 from django.urls import  reverse_lazy
+from django.contrib import messages
 
 
 
@@ -29,8 +31,12 @@ class validarPermisosRequeridosMixin(object):
         return self.self.url_redirect   
 
     def dispatch(self , request , *args , **kwargs):
-        if request.user.has_perms(self.get_perms()):
+        print(request.user)
+        if request.user.has_perm(self.get_perms()):
+            print("aquiiiiiiiiiiiiiii en el dispatch")
             return super().dispatch(request , *args , **kwargs)
+        print("aquiiiiiiiiiiiiiii no esyoy en  el dispatch")
+        messages.error(request, 'no tiene permitido el acceso')    
         return redirect(self.get_url_redirect())    
 
 

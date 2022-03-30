@@ -5,14 +5,11 @@
 {%block content%}
 
 
-{% if perms %}
-    <!-- We can mark a BookInstance as returned. -->
-    <!-- Perhaps add code to link to a "book return" view here. -->
 
-    <h1>NO PUEDES VER
 
-    </h1>
-{% endif %}
+
+
+
 
 <a href="{% url  'logout' %}">cerrar sesion</a>
 <div class="content">
@@ -136,10 +133,26 @@ function crear_subActividad_modal (url){
   
   
   
-  </script> 
-  
+</script> 
+
+
+<script>
+
   
 
+{% if messages %}
+
+    {% for message in messages %}
+    
+     alert("{{message}}")   
+   
+    
+    {% endfor %}
+{% endif %}
+
+</script>
+  
+  
 
 
 

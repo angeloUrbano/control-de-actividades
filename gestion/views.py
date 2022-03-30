@@ -204,8 +204,8 @@ class muestra (TemplateView):
 
 
 
-class crear_actividad (validarPermisosRequeridosMixin , CreateView):
-    permission_required = 'gestion.add_activ_principal'
+class crear_actividad (CreateView):
+   
   
     model = activ_principal
     template_name = "corp/registro2.html"
@@ -215,7 +215,7 @@ class crear_actividad (validarPermisosRequeridosMixin , CreateView):
 
 
 class crear_sud_actividad(View):
-
+   
     model =  sud_actividad
     second_model= activ_principal
     template_name = "corp/registro1.html"
@@ -302,8 +302,8 @@ class crear_sud_actividad(View):
 
 
 
-class lista_actividades(PermissionRequiredMixin, ListView):
-    permission_required = 'gestion.view_activ_principal'
+class lista_actividades(ListView):
+    
     model = activ_principal
     template_name = "corp/listar_actividad.html"
 
@@ -318,8 +318,8 @@ class editar_actividad(UpdateView):
     success_url = reverse_lazy('gestion:lista_actividades')
     
 
-
-class eliminar_actividad( PermissionRequiredMixin, DeleteView):
+#validarPermisosRequeridosMixin es un validador de permisos creado por mi y esta en Mixins.py
+class eliminar_actividad(validarPermisosRequeridosMixin , DeleteView):
     permission_required = 'gestion.delete_activ_principal'
     model = activ_principal
 
@@ -376,8 +376,9 @@ class editar_sub_actividad(UpdateView):
 
     
 
-
-class eliminar_sub_Actividad(DeleteView):
+#validarPermisosRequeridosMixin es un validador de permisos creado por mi y esta en Mixins.py 
+class eliminar_sub_Actividad(validarPermisosRequeridosMixin , DeleteView):
+    permission_required = 'gestion.delete_sud_actividad'
     model = sud_actividad
     template_name="corp/eliminar_subActividad.html"
     success_url = reverse_lazy('gestion:lista_actividades') 
@@ -394,6 +395,17 @@ class eliminar_sub_Actividad(DeleteView):
 
         url = reverse('gestion:detalle_actividad' , kwargs={'pk':self.kwargs['pk2']})
         return redirect(url)
+
+
+
+
+
+class listar_user(ListView):
+
+    model = User
+    template_name = 'corp/lista_user.html'
+    
+
 
         
 

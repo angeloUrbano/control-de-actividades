@@ -21,6 +21,7 @@ urlpatterns = [
 
 
     path("crear_user/", crear_usuario.as_view(), name="crear_user"),
+    path("listar_usiarios/", listar_user.as_view(), name="listar_usiarios"),
     
  
     

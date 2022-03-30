@@ -1,0 +1,86 @@
+{% extends "corpoelec.html" %}
+
+
+
+{%block content%}
+
+
+
+
+
+
+
+
+<a href="{% url  'logout' %}">cerrar sesion</a>
+<div class="content">
+
+    <table class="table">
+        <thead class="thead-dark">
+          <tr>
+            
+            <th>Nro actividad </th>
+            <th>Nom ACtividad </th>
+            
+           
+            <th>Avance </th>
+            
+            <th>Estado</th>
+            <th>detalle</th>
+            
+            <th style="text-align: center;">accion</th>
+            <th>Crear Sub Actividad</th>
+            
+          </tr>
+        </thead>
+        <tbody>
+
+            {% if object_list %}
+
+
+            {% for datos in object_list %}
+          <tr >
+            
+            <td>{{datos.email}}</td>
+            <td>{{datos.first_name}}</td>
+            
+
+          
+            <td>{{datos.last_name}} %</td>
+            
+            <td>{{datos.id_estado2}}</td>
+            <td>
+                <a href="">prueba</a>   
+            </td>
+            <td>
+               
+
+                <a href="">prueba</a>    
+                <a href="">prueba</a>        
+            </td>
+            <td>
+            <a href="">prueba</a>        
+    </td>
+          </tr>
+
+          {% endfor %}
+          {% endif %}
+        </tbody>
+      </table> 
+    
+    
+      
+
+
+
+ 
+
+  
+
+
+
+  
+  
+
+
+
+{%endblock content%}
