@@ -115,9 +115,9 @@ class crear_usuario(View):
 
                 
                 
-                if x.name == "nivel1" and  estado !="Aragua":
-                    print("aqui en la condicion del view ")
-                    messages.error(request, " Usuario de nivel 1 solo debe ser de aragua") 
+                if x.name == "nivel2" and  estado !="Aragua":
+                   
+                    messages.error(request, " Usuario de nivel 2 solo debe ser del estado aragua") 
                     return render(request , self.template_name , {'form':form})
                     
                     
@@ -132,7 +132,7 @@ class crear_usuario(View):
             """User.set_password(password)
             User.is_active = True
             User.save()"""
-            return redirect('gestion:lista_actividades')
+            return redirect('gestion:listar_usiarios')
 
         return render(request , self.template_name , {'form':form})
 
@@ -420,6 +420,40 @@ class listar_user(ListView):
 
     model = User
     template_name = 'corp/lista_user.html'
+
+
+class detalle_Usuario(DetailView):
+   
+   
+    template_name= 'corp/detalle_usuario.html'
+    pk_url_kwargs= 'pk'	
+    queryset= User.objects.all()
+
+ 
+
+
+
+    """def get_context_data(self , **kwargs):
+
+
+        context = super().get_context_data(**kwargs)
+
+     
+        dato =0 
+        for x in self.queryset:
+            if x.groups.filter(user=self.kwargs['pk']):
+                dato = x.groups.filter(user=self.kwargs['pk'])
+
+        print(dato)         
+       
+       #context['object2']= User.groups.filter(user_id=1).exists()
+		
+        return context"""
+
+
+    
+
+
     
 
 

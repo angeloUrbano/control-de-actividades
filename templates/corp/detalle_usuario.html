@@ -1,0 +1,59 @@
+{% extends "corpoelec.html" %}
+
+
+
+
+{%block content%}
+
+
+    <ul class="list-group">
+        <li class="list-group-item active">Datos del trabajador</li>
+
+        <li class="list-group-item">Nombre del trabajador  : {{object.first_name}}</li>
+        <li class="list-group-item">Apellido del trabajador: {{object.last_name}}</li>
+
+        <li class="list-group-item"> Cedula del trabajador:  {{object.cedula}}</li>
+        <li class="list-group-item"> Estado  del trabajador: {{object.estado}}</li>
+
+        <li class="list-group-item"> Correo del trabajador : {{object.email}}</li>
+        <li class="list-group-item">Nombre corporativo : {{object.username}}</li>
+        
+
+
+
+        {% for group in object.groups.all %}
+        <li class="list-group-item">Nivel de usuario : {{ group }}</li>
+           
+        {% endfor %}
+
+    
+      </ul>
+
+      <br>
+      <br>
+      <h4 style="text-align: center; color: black; ">Sub Actividades </h4>
+      <br>
+      <br>
+
+
+   <div class="row">
+    
+    <div class="content"></div>
+    <a class="btn btn-success " href="">prueba</a>
+
+   </div>
+
+
+
+
+      
+
+
+
+
+      
+      
+      
+
+
+{%endblock content%}

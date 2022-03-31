@@ -117,6 +117,10 @@ class Crea_Usuario(forms.ModelForm):
 
 		#patron = re.compile("^\w+$")
 		nombre_corporativo = self.cleaned_data.get('nombre_corporativo')
+
+		User = get_user_model()
+		if User.objects.filter(username =nombre_corporativo).exists():
+			raise forms.ValidationError("Nombre corporativo se encuenta en uso ")
 		
 		
 		if not re.match(r'[a-zA-Z\s]+$', nombre_corporativo) or nombre_corporativo == "":

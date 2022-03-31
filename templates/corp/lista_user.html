@@ -18,17 +18,17 @@
         <thead class="thead-dark">
           <tr>
             
-            <th>Nro actividad </th>
-            <th>Nom ACtividad </th>
+            <th>Nombre </th>
+            <th>Apellido </th>
             
            
-            <th>Avance </th>
+            <th>Cedula </th>
             
             <th>Estado</th>
             <th>detalle</th>
             
-            <th style="text-align: center;">accion</th>
-            <th>Crear Sub Actividad</th>
+            <th style="text-align: center;">prueba</th>
+            <th>prueba</th>
             
           </tr>
         </thead>
@@ -40,16 +40,18 @@
             {% for datos in object_list %}
           <tr >
             
-            <td>{{datos.email}}</td>
+           
             <td>{{datos.first_name}}</td>
             
 
           
-            <td>{{datos.last_name}} %</td>
+            <td>{{datos.last_name}} </td>
+            <td>{{datos.cedula}} </td>
             
-            <td>{{datos.id_estado2}}</td>
+            <td>{{datos.estado}}</td>
+
             <td>
-                <a href="">prueba</a>   
+                <a href="{% url 'gestion:detalle_usiarios' datos.id %}" class="btn btn-info">detalle</a>   
             </td>
             <td>
                
