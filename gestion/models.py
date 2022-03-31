@@ -49,7 +49,7 @@ class User(AbstractUser):
     cargo= models.CharField(max_length=100 , blank=False, null= False )
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS=[ 'username',  'first_name' , 'last_name'  , 'cedula' , 'nombre_corporativo' , 
-    'estado' , 'cargo']
+    'estado' , 'cargo' , 'groups']
 
     
 

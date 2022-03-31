@@ -68,6 +68,9 @@ class Crea_Usuario(forms.ModelForm):
 		
 		}
 
+	
+
+	
 
 	def clean_first_name(self):
 
@@ -136,7 +139,16 @@ class Crea_Usuario(forms.ModelForm):
 			raise forms.ValidationError("debe ser solo letras y  es un campo obligatorio")
 
 		
-		return cargo	
+		return cargo
+
+
+	
+		
+		
+		
+
+		
+				
 
 	
 			
@@ -169,7 +181,9 @@ class Crea_Usuario(forms.ModelForm):
 
 		password= data['password']
 		password_confirmation = data['password_confirmation']
-
+		
+		
+		
 		if password != password_confirmation:
 			raise forms.ValidationError('Las contrañas no coninciden ')
 

@@ -1,5 +1,5 @@
 
-
+from django import forms
 from django.http import request
 from django.shortcuts import redirect, render
 from django.urls import reverse
@@ -22,6 +22,7 @@ from django.urls import  reverse_lazy
 from  openpyxl import Workbook, workbook
 from openpyxl.styles import  PatternFill, Border, Side, Alignment, Protection, Font, alignment
 from django.http.response import HttpResponse, StreamingHttpResponse
+from django.contrib import messages
 
 
 
@@ -109,12 +110,21 @@ class crear_usuario(View):
             cargo = datos_limpios['cargo']
             
 
-            User = get_user_model()
-            User = User.objects.create_user(username=first_name, email=email , last_name =last_name , password = password , is_active = True ,
-            cedula =cedula , nombre_corporativo = nombre_corporativo , estado =estado ,
-            cargo = cargo)
+            
             for x in datos_limpios['groups']:
 
+                
+                
+                if x.name == "nivel1" and  estado !="Aragua":
+                    print("aqui en la condicion del view ")
+                    messages.error(request, " Usuario de nivel 1 solo debe ser de aragua") 
+                    return render(request , self.template_name , {'form':form})
+                    
+                    
+                User = get_user_model()
+                User = User.objects.create_user(username= nombre_corporativo, email=email , last_name =last_name , password = password , is_active = True ,
+                cedula =cedula , first_name = first_name , estado =estado ,
+                cargo = cargo)
                 User.groups.add(x)
 
 
