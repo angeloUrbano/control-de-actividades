@@ -49,13 +49,13 @@
             
             <td>{{datos.id_estado2}}</td>
             <td>
-                <a href="{% url 'gestion:detalle_actividad' datos.id %}"  class="btn btn-info" > detalle</a>
+                <a href="{% url 'gestion:detalle_actividad' datos.id %}"  class="btn btn-info" > <i class="fa fa-file"></i> detalle</a>
             </td>
             <td>
                
 
-                <button class="btn btn-primary" onclick="editar_actividad_modal('{% url 'gestion:editar_actividads' datos.id  %}')">Editar</button>
-                <button  type="button" class="btn btn-danger" onclick="eliminar_actividad_modal('{% url 'gestion:eliminar_actividad' datos.id  %}')">Eliminar</button>
+                <button class="btn btn-primary" onclick="editar_actividad_modal('{% url 'gestion:editar_actividads' datos.id  %}')"> <i class="fa fa-pen"></i></i>Editar</button>
+                <button  type="button" class="btn btn-danger" onclick="eliminar_actividad_modal('{% url 'gestion:eliminar_actividad' datos.id  %}')"> <i class="fa fa-trash"></i>Eliminar</button>
      
             </td>
             <td>

@@ -26,10 +26,7 @@
             
             <th>Estado</th>
             <th>detalle</th>
-            
-            <th style="text-align: center;">prueba</th>
-            <th>prueba</th>
-            
+           
           </tr>
         </thead>
         <tbody>
@@ -51,17 +48,9 @@
             <td>{{datos.estado}}</td>
 
             <td>
-                <a href="{% url 'gestion:detalle_usiarios' datos.id %}" class="btn btn-info">detalle</a>   
+                <a href="{% url 'gestion:detalle_usiarios' datos.id %}" class="btn btn-info"> <i class="fa fa-file"></i> detalle</a>   
             </td>
-            <td>
-               
-
-                <a href="">prueba</a>    
-                <a href="">prueba</a>        
-            </td>
-            <td>
-            <a href="">prueba</a>        
-    </td>
+           
           </tr>
 
           {% endfor %}

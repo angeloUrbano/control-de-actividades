@@ -7,7 +7,8 @@ from django.urls import reverse
 from django.views.generic.edit import DeleteView, UpdateView
 from openpyxl.styles.fills import FILL_NONE
 
-from gestion.forms import activ_principalForm, sud_actividadForm , sud_actividadForm2 , Crea_Usuario
+from gestion.forms import activ_principalForm, sud_actividadForm , sud_actividadForm2 , Crea_Usuario , update_Usuario , update_contraseña_Usuario
+
 from gestion.models import *
 from gestion.Mixins import validarPermisosRequeridosMixin
 from django.contrib.auth import authenticate, get_user_model
@@ -235,7 +236,7 @@ class crear_sud_actividad(View):
     model =  sud_actividad
     second_model= activ_principal
     template_name = "corp/registro1.html"
-    form_class =  sud_actividadForm
+    form_class =  sud_actividadForm2
     success_url = reverse_lazy('gestion:lista_actividades')
 
 
@@ -323,6 +324,26 @@ class lista_actividades(ListView):
     model = activ_principal
     template_name = "corp/listar_actividad.html"
 
+
+    def get_context_data(self , **kwargs):
+        
+        context = super().get_context_data(**kwargs)
+        
+        variable = self.request.user.estado
+
+        if self.request.user.is_staff:
+            consulta = self.model.objects.all()
+            
+        else:
+            consulta = self.model.objects.filter(id_estado2=variable)
+
+        
+        
+
+        context['object_list'] = consulta
+       
+
+        return context
 
 
 
@@ -429,11 +450,16 @@ class detalle_Usuario(DetailView):
     pk_url_kwargs= 'pk'	
     queryset= User.objects.all()
 
- 
+    #asi se puede acceder a los grupos
+    """dato =0 
+        for x in self.queryset:
+            if x.groups.filter(user=self.kwargs['pk']):
+                dato = x.groups.filter(user=self.kwargs['pk'])
+
+        print(dato)  """
 
 
-
-    """def get_context_data(self , **kwargs):
+    def get_context_data(self , **kwargs):
 
 
         context = super().get_context_data(**kwargs)
@@ -441,14 +467,85 @@ class detalle_Usuario(DetailView):
      
         dato =0 
         for x in self.queryset:
-            if x.groups.filter(user=self.kwargs['pk']):
-                dato = x.groups.filter(user=self.kwargs['pk'])
+            
+            dato = x.password
 
         print(dato)         
        
        #context['object2']= User.groups.filter(user_id=1).exists()
 		
-        return context"""
+        return context
+
+class editar_usuario(UpdateView):
+    model= User
+    form_class =  update_Usuario
+    template_name ='corp/editar_usuario.html'
+
+
+
+    def post(self , request , *args , **kwargs):
+
+        instancia = self.model.objects.get(id=self.kwargs['pk'])
+        form = self.form_class(request.POST , instance=instancia)
+        if form.is_valid():
+           
+            instancia.save()
+
+            url = reverse('gestion:detalle_usiarios' , kwargs={'pk':self.kwargs['pk']})
+            return redirect(url)
+
+        return render(request , self.template_name , {'form':form})
+    
+
+
+
+
+
+
+
+class editar_contraseña_usuario(UpdateView):
+    model= User
+    form_class =  update_contraseña_Usuario
+    template_name ='corp/editarcontraseña_usuario.html'
+    
+
+
+
+  
+    def post(self , request , *args , **kwargs):
+
+        instancia = self.model.objects.get(id=self.kwargs['pk'])
+        form = self.form_class(request.POST , instance=instancia)
+        if form.is_valid():
+            print(form.cleaned_data.get('password1'))
+            
+            instancia.set_password(form.cleaned_data.get('password'))
+
+            
+
+            instancia.save()
+
+            url = reverse('gestion:detalle_usiarios' , kwargs={'pk':self.kwargs['pk']})
+            return redirect(url)
+
+        return render(request , self.template_name , {'form':form})
+
+
+
+
+class eliminar_Usuario( DeleteView):
+   
+    model = User
+
+    template_name="corp/eliminar_Usuario.html"
+    success_url = reverse_lazy('gestion:listar_usiarios')        
+
+
+     
+
+
+  
+
 
 
     

@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from django.contrib import admin
-from .models import activ_principal, sud_actividad, estados , User
+from .models import activ_principal, sud_actividad, User
 from django.contrib.auth.models import Permission
 
 
@@ -37,7 +37,7 @@ admin.site.index_title ="Corpolec"
 
 admin.site.register(activ_principal, activ_principalAdmin)
 admin.site.register(sud_actividad, estadosAdmin)
-admin.site.register(estados)
+
 
 admin.site.register(User)
 

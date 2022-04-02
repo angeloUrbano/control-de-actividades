@@ -1,0 +1,78 @@
+{% extends "corpoelec.html" %}
+
+
+{%block content%}
+<div class="modal-dialog">
+	<div class="modal-content">
+		<div class="modal-header">
+			<h2 class="modal-title"> eliminar Sub actividad</h2>
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+			</div>
+
+			<div class="row justify-content-md-center">
+            <div class="col-6 pt-3 pb-3" id="profile-box">
+              <div class="card-title py-3">
+			<form action="" method="post" >
+				
+
+			<div class="modal-body modal-body-sub_agile">
+				<div class="col-md-8 modal_body_left modal_body_left1">
+				<div class="form-grup">
+
+
+					{% csrf_token %}
+                        
+                    <p><Em>Esta seguro que desea eliminar este elemento?</Em> "{{ object }}"?</p>
+                    {{ form }}
+                   
+               
+                  
+               
+
+							
+
+								
+
+
+
+							
+</div>
+				
+
+			</div>
+				<a class="btn btn-danger" href="{% url 'gestion:listar_usiarios'%}">Cancelar</a>
+				
+				<button class="btn btn-primary" type="submit" > Aprobar</button>
+				
+
+			
+
+			</form>
+			</div>
+			</div>
+			</div>
+				
+		
+
+
+
+	</div>
+	
+
+
+
+
+
+</div>
+</div>
+
+
+
+    
+
+
+
+
+{%endblock content%}

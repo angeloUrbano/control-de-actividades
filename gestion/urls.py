@@ -23,6 +23,11 @@ urlpatterns = [
     path("crear_user/", crear_usuario.as_view(), name="crear_user"),
     path("listar_usiarios/", listar_user.as_view(), name="listar_usiarios"),
     path("detalle_usiarios/<int:pk>", detalle_Usuario.as_view(), name="detalle_usiarios"),
+    path("editar_usiarios/<int:pk>", editar_usuario.as_view(), name="editar_usiarios"),
+    path("editarcontraseña_usiarios/<int:pk>", editar_contraseña_usuario.as_view(), name="editarcontraseña_usiarios"),
+    path("eliminar_usiarios/<int:pk>", eliminar_Usuario.as_view(), name="eliminar_usiarios"),
+
+
     
  
     

@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from datetime import date, time, datetime
 
 
-from .models  import  activ_principal, estados, sud_actividad
+from .models  import  activ_principal,  sud_actividad
 from django.core.exceptions import ValidationError
 
 from .validators import letras_solo
@@ -14,6 +14,108 @@ from .validators import letras_solo
 
 
 from django.contrib.auth import get_user_model
+
+
+class update_contraseña_Usuario(forms.ModelForm):
+	
+	password_confirmation = forms.CharField(max_length=70 , widget=forms.PasswordInput(
+		attrs={'class':'form-control'}
+	))
+
+
+	class Meta:
+		User = get_user_model()
+
+		model=User
+	
+
+		fields=['password']
+
+		
+
+
+		labels={
+			'password':'password'
+		}
+
+
+		widgets = {
+
+		
+
+		'password': forms.PasswordInput(attrs={'class':'form-control'}),
+		
+		}
+
+
+
+
+	def clean(self):
+		data = super().clean()
+
+		password= data['password']
+		password_confirmation = data['password_confirmation']
+		
+		
+		
+		if password != password_confirmation:
+			raise forms.ValidationError('Las contrañas no coninciden ')
+
+		return data	
+
+
+
+
+
+
+
+class update_Usuario(forms.ModelForm):
+	
+	
+
+	class Meta:
+		User = get_user_model()
+
+		model=User
+	
+
+		fields=['email','first_name','last_name','groups'  ,
+		'cedula' ,'username' , 'estado'  , 'cargo' ]
+
+		
+
+
+		labels={
+			'email':'correo',
+			'first_name':'Nombre',
+			'last_name':'Apellido',
+			'cedula': 'Cedula',
+			'username' :'Nombre Corporativo' ,
+			'estado':'Estado',
+			'cargo':'Cargo',
+			'groups':'gupos'
+
+			
+		}
+
+
+		widgets = {
+
+		'email': forms.EmailInput(attrs={'class':'form-control'}),
+		'first_name': forms.TextInput(attrs={'class':'form-control'}),
+		'last_name': forms.TextInput(attrs={'class':'form-control'}),
+
+		'cedula': forms.TextInput(attrs={'class':'form-control'}),
+		'username': forms.TextInput(attrs={'class':'form-control'}),
+		'estado': forms.Select(attrs={'class':'form-control'}),
+		'cargo': forms.TextInput(attrs={'class':'form-control'}),
+
+
+		'groups': forms.SelectMultiple(attrs={'class':'form-control'}),
+
+		
+		
+		}
 
 
 
@@ -69,7 +171,18 @@ class Crea_Usuario(forms.ModelForm):
 		}
 
 	
+	def clean_groups(self):
 
+		#patron = re.compile("^\w+$")
+		groups = self.cleaned_data.get('groups')
+		
+		
+		if groups:
+			
+			raise forms.ValidationError("debe asignarle un nivel al usuario ")
+
+		
+		return groups
 	
 
 	def clean_first_name(self):

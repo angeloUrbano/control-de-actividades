@@ -6,42 +6,57 @@
 {%block content%}
 
 
+
+
+<div class="container">
+
+
+<div class="row">
+
+
+  <div class="col-2"></div>
+
+  <div class="col-8">
     <ul class="list-group">
-        <li class="list-group-item active">Datos del trabajador</li>
+      <li class="list-group-item active">Datos del trabajador</li>
+  
+      <li class="list-group-item">Nombre del trabajador  : {{object.first_name}}</li>
+      <li class="list-group-item">Apellido del trabajador: {{object.last_name}}</li>
+  
+      <li class="list-group-item"> Cedula del trabajador:  {{object.cedula}}</li>
+      <li class="list-group-item"> Estado  del trabajador: {{object.estado}}</li>
+  
+      <li class="list-group-item"> Correo del trabajador : {{object.email}}</li>
+      <li class="list-group-item">Nombre corporativo : {{object.username}}</li>
+      
+  
+  
+  
+      {% for group in object.groups.all %}
+      <li class="list-group-item">Nivel de usuario : {{ group }}</li>
+         
+      {% endfor %}
+  
+  
+    </ul>
 
-        <li class="list-group-item">Nombre del trabajador  : {{object.first_name}}</li>
-        <li class="list-group-item">Apellido del trabajador: {{object.last_name}}</li>
+    <br>
+   
 
-        <li class="list-group-item"> Cedula del trabajador:  {{object.cedula}}</li>
-        <li class="list-group-item"> Estado  del trabajador: {{object.estado}}</li>
+    <a class="btn btn-success" href="{% url 'gestion:editar_usiarios' object.id %}"><i class="fa fa-pen"></i></i> Editar Perfil</a>
+    <a class="btn btn-primary" href="{% url 'gestion:editarcontraseña_usiarios' object.id %}"><i class="fa fa-pen"></i></i> Editar Contraseña</a>
+     <a   class="btn btn-danger" href="{% url 'gestion:eliminar_usiarios' object.id %}"> <i class="fa fa-trash"></i> Eliminar </a>
+  
+     
+  </div>
+  <i class="fa-solid fa-trash-can"></i>
 
-        <li class="list-group-item"> Correo del trabajador : {{object.email}}</li>
-        <li class="list-group-item">Nombre corporativo : {{object.username}}</li>
-        
+  <div class="col-2"></div>
 
-
-
-        {% for group in object.groups.all %}
-        <li class="list-group-item">Nivel de usuario : {{ group }}</li>
-           
-        {% endfor %}
-
+  
+</div>
+</div>
     
-      </ul>
-
-      <br>
-      <br>
-      <h4 style="text-align: center; color: black; ">Sub Actividades </h4>
-      <br>
-      <br>
-
-
-   <div class="row">
-    
-    <div class="content"></div>
-    <a class="btn btn-success " href="">prueba</a>
-
-   </div>
 
 
 
