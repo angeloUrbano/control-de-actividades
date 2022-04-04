@@ -61,6 +61,14 @@ class update_contraseña_Usuario(forms.ModelForm):
 		if password != password_confirmation:
 			raise forms.ValidationError('Las contrañas no coninciden ')
 
+		
+				
+
+		if  not password.isalnum()  or  not password_confirmation.isalnum() :
+			raise forms.ValidationError('la contraseña debe estar conpuesta de numeros y letras y tener un maximo de 8 caracteres')
+
+
+
 		return data	
 
 
@@ -177,7 +185,7 @@ class Crea_Usuario(forms.ModelForm):
 		groups = self.cleaned_data.get('groups')
 		
 		
-		if groups:
+		if  not groups:
 			
 			raise forms.ValidationError("debe asignarle un nivel al usuario ")
 
@@ -259,19 +267,6 @@ class Crea_Usuario(forms.ModelForm):
 		return cargo
 
 
-	
-		
-		
-		
-
-		
-				
-
-	
-			
-	
-		
-
 
 
 		
@@ -293,6 +288,8 @@ class Crea_Usuario(forms.ModelForm):
 
 		return email	
 
+		
+
 	def clean(self):
 		data = super().clean()
 
@@ -304,7 +301,7 @@ class Crea_Usuario(forms.ModelForm):
 		if password != password_confirmation:
 			raise forms.ValidationError('Las contrañas no coninciden ')
 
-		return data	
+		
 
 	def save(self):
 		#esta funcion es para guardar los datos

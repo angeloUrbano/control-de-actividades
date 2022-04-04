@@ -27,7 +27,7 @@ urlpatterns = [
     path("editarcontraseña_usiarios/<int:pk>", editar_contraseña_usuario.as_view(), name="editarcontraseña_usiarios"),
     path("eliminar_usiarios/<int:pk>", eliminar_Usuario.as_view(), name="eliminar_usiarios"),
 
-
+    path("reporte/" , reporte_excel.as_view() , name="reporte"),    
     
  
     

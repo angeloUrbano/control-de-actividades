@@ -33,8 +33,8 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 
 
 
-     
-      
+	 
+	  
 
 def login_view(request):
 	
@@ -46,12 +46,12 @@ def login_view(request):
 		password = request.POST['password']
 	
 		User = authenticate( username=username, password = password)
-        
+		
 		print(User)
 		if User :
 			
 			login(request , User)
-           
+		   
 			
 			return redirect('gestion:lista_actividades')
 		else:
@@ -72,70 +72,70 @@ def logout_view(request):
 class crear_usuario(View):
 
    
-    template_name = 'corp/signup.html'
-    form_class = Crea_Usuario
+	template_name = 'corp/signup.html'
+	form_class = Crea_Usuario
 
 
 
 
-    def get (self, request):
+	def get (self, request):
 
-        return render(request,self.template_name , {'form':self.form_class})
-
-
-    def post(self , request , *args , **kwargs):
-
-        form  = self.form_class(request.POST) 
-        
-
-        if form.is_valid():
-            print("aquiii ya pase el formularo valido")
-
-         
-
-            datos_limpios = form.cleaned_data
-
-          
-
-           
-
-           
-            email = datos_limpios['email']
-            first_name = datos_limpios['first_name']
-            last_name = datos_limpios['last_name']
-            password = datos_limpios['password']
-            password_confirmation = datos_limpios['password_confirmation']
-            cedula= datos_limpios['cedula']
-            nombre_corporativo= datos_limpios['nombre_corporativo']
-            estado= datos_limpios['estado']
-            cargo = datos_limpios['cargo']
-            
-
-            
-            for x in datos_limpios['groups']:
-
-                
-                
-                if x.name == "nivel2" and  estado !="Aragua":
-                   
-                    messages.error(request, " Usuario de nivel 2 solo debe ser del estado aragua") 
-                    return render(request , self.template_name , {'form':form})
-                    
-                    
-                User = get_user_model()
-                User = User.objects.create_user(username= nombre_corporativo, email=email , last_name =last_name , password = password , is_active = True ,
-                cedula =cedula , first_name = first_name , estado =estado ,
-                cargo = cargo)
-                User.groups.add(x)
+		return render(request,self.template_name , {'form':self.form_class})
 
 
+	def post(self , request , *args , **kwargs):
 
-            """User.set_password(password)
-            User.is_active = True
-            User.save()"""
-            return redirect('gestion:listar_usiarios')
+		form  = self.form_class(request.POST) 
+		
 
-        return render(request , self.template_name , {'form':form})
+		if form.is_valid():
+			print("aquiii ya pase el formularo valido")
+
+		 
+
+			datos_limpios = form.cleaned_data
+
+		  
+
+		   
+
+		   
+			email = datos_limpios['email']
+			first_name = datos_limpios['first_name']
+			last_name = datos_limpios['last_name']
+			password = datos_limpios['password']
+			password_confirmation = datos_limpios['password_confirmation']
+			cedula= datos_limpios['cedula']
+			nombre_corporativo= datos_limpios['nombre_corporativo']
+			estado= datos_limpios['estado']
+			cargo = datos_limpios['cargo']
+			
+
+			
+			for x in datos_limpios['groups']:
+
+				
+				
+				if x.name == "nivel2" and  estado !="Aragua":
+				   
+					messages.error(request, " Usuario de nivel 2 solo debe ser del estado aragua") 
+					return render(request , self.template_name , {'form':form})
+					
+					
+				User = get_user_model()
+				User = User.objects.create_user(username= nombre_corporativo, email=email , last_name =last_name , password = password , is_active = True ,
+				cedula =cedula , first_name = first_name , estado =estado ,
+				cargo = cargo)
+				User.groups.add(x)
+
+
+
+			"""User.set_password(password)
+			User.is_active = True
+			User.save()"""
+			return redirect('gestion:listar_usiarios')
+
+		return render(request , self.template_name , {'form':form})
 
 
 
@@ -146,59 +146,59 @@ class crear_usuario(View):
 
 class signup (View):
 
-    def get (self, request):
+	def get (self, request):
 
-        return render(request,'corp/signup.html')
+		return render(request,'corp/signup.html')
 
-    def post(self,request):
+	def post(self,request):
 
-        username = request.POST['username']
-        email = request.POST['username']
+		username = request.POST['username']
+		email = request.POST['username']
 
-        
-        nombre = request.POST['Nombre']
-        last_name = request.POST['last_name']
-        region = request.POST['estado']
-        nivel = request.POST['nivel']
-        
+		
+		nombre = request.POST['Nombre']
+		last_name = request.POST['last_name']
+		region = request.POST['estado']
+		nivel = request.POST['nivel']
+		
 
-        
-        password = request.POST['password']
-        password_confirmation = request.POST['password_confirmation']
+		
+		password = request.POST['password']
+		password_confirmation = request.POST['password_confirmation']
 
-        context = {
-            'fieldValues': request.POST
-        }
-
-
-        if password != password_confirmation:
-
-            print('contraseña')
-
-            return render (request, 'corp/signup.html', {'error': 'Contraseñas no coinciden'})
-        
-        User = get_user_model()
-
-        if User.objects.filter(email =email).exists():
-            return render (request, 'corp/signup.html', {'error': 'Correo en uso'})
-
-        if not User.objects.filter(email=email).exists():
-
-          User = User.objects.create_user(username=username, email=email)
-          User.set_password(password)
-          User.is_active = True
-          User.save()
+		context = {
+			'fieldValues': request.POST
+		}
 
 
-          print("!!!!!!!!!!!!!!!!!! porque no se guarda!!!!!!!!!!!!!!")
-          profile= Profile( user=User, nombre=nombre , apellido=apellido , email=email, region=region, nivel=nivel)
-          print("!!!!!!!!!!!!!!!!se guardo!!!!!!!!!!!!!!!!")
-          profile.save
+		if password != password_confirmation:
 
-          return redirect('login')
+			print('contraseña')
+
+			return render (request, 'corp/signup.html', {'error': 'Contraseñas no coinciden'})
+		
+		User = get_user_model()
+
+		if User.objects.filter(email =email).exists():
+			return render (request, 'corp/signup.html', {'error': 'Correo en uso'})
+
+		if not User.objects.filter(email=email).exists():
+
+		  User = User.objects.create_user(username=username, email=email)
+		  User.set_password(password)
+		  User.is_active = True
+		  User.save()
 
 
-        return render(request, 'corp/signup.html')
+		  print("!!!!!!!!!!!!!!!!!! porque no se guarda!!!!!!!!!!!!!!")
+		  profile= Profile( user=User, nombre=nombre , apellido=apellido , email=email, region=region, nivel=nivel)
+		  print("!!!!!!!!!!!!!!!!se guardo!!!!!!!!!!!!!!!!")
+		  profile.save
+
+		  return redirect('login')
+
+
+		return render(request, 'corp/signup.html')
 
 
 
@@ -206,112 +206,112 @@ class signup (View):
 
 
 """
-    ##############
+	##############
 
-            COMIENZO DESDE CERO
+			COMIENZO DESDE CERO
 
-                            ###########################
+							###########################
 
-                    """
+					"""
   
 
 class muestra (TemplateView):
 
-    template_name="corp/registro2.html"
+	template_name="corp/registro2.html"
 
 
 
 class crear_actividad (CreateView):
    
   
-    model = activ_principal
-    template_name = "corp/registro2.html"
-    form_class =  activ_principalForm
-    success_url = reverse_lazy('gestion:lista_actividades')
+	model = activ_principal
+	template_name = "corp/registro2.html"
+	form_class =  activ_principalForm
+	success_url = reverse_lazy('gestion:lista_actividades')
 
 
 
 class crear_sud_actividad(View):
    
-    model =  sud_actividad
-    second_model= activ_principal
-    template_name = "corp/registro1.html"
-    form_class =  sud_actividadForm2
-    success_url = reverse_lazy('gestion:lista_actividades')
+	model =  sud_actividad
+	second_model= activ_principal
+	template_name = "corp/registro1.html"
+	form_class =  sud_actividadForm2
+	success_url = reverse_lazy('gestion:lista_actividades')
 
 
-    #esta funcion me permite agarrar el valor de id de la actividad que viene en la url
-    # con esto lo agarro self.kwargs['pk']
-    def get_object(self , **kwargs):
+	#esta funcion me permite agarrar el valor de id de la actividad que viene en la url
+	# con esto lo agarro self.kwargs['pk']
+	def get_object(self , **kwargs):
 
-        
-        var = self.second_model.objects.get(id=self.kwargs['pk'])		
+		
+		var = self.second_model.objects.get(id=self.kwargs['pk'])		
 
-        return var
-
-
-    """
-    esta funcion me permire reescribir el metodo post de mi clase y lo uso para guardar la sub actividad 
-    lo hago asi por que quiero que el cliente no tenga necesidad de seleccionar a que actividad
-    pertenece esta sub actividad 
-    entonces con la funcion  get_object me traigo el objeto  que es la actividad para tener ese valor por defecto
-    y asi el cliente no tendra que buscar pot ejemplo entre 1.000 actividades 
-    para ver cual es la suya o cosas por el estilo"""
-
-    def post(self , request , *args , **kwargs) :
-
-        form = self.form_class(request.POST)
-
-        if form.is_valid():
-            
-            #le quito el html al formulario que viene por el metodo post 
-            formulario_limpio = form.cleaned_data
+		return var
 
 
-            #creo un objeto de mi modelo para usarlo para guardar 
-            sub_actividad_guuardar = self.model()
+	"""
+	esta funcion me permire reescribir el metodo post de mi clase y lo uso para guardar la sub actividad 
+	lo hago asi por que quiero que el cliente no tenga necesidad de seleccionar a que actividad
+	pertenece esta sub actividad 
+	entonces con la funcion  get_object me traigo el objeto  que es la actividad para tener ese valor por defecto
+	y asi el cliente no tendra que buscar pot ejemplo entre 1.000 actividades 
+	para ver cual es la suya o cosas por el estilo"""
 
-            #accedo a las propiedades de mi objeto
-            sub_actividad_guuardar.num_actividad = formulario_limpio['num_actividad']
-            sub_actividad_guuardar.nom_actividad= formulario_limpio['nom_actividad']
-            sub_actividad_guuardar.fecha_inicio = formulario_limpio['fecha_inicio']
-            sub_actividad_guuardar.fecha_fin = formulario_limpio['fecha_fin']
-            sub_actividad_guuardar.fecha_real = formulario_limpio['fecha_real']
-            sub_actividad_guuardar.impacto = formulario_limpio['impacto']
-            sub_actividad_guuardar.punto_critico = formulario_limpio['punto_critico']
-            sub_actividad_guuardar.id_activ = self.get_object()
+	def post(self , request , *args , **kwargs) :
 
-            sub_actividad_guuardar.save()
+		form = self.form_class(request.POST)
 
-            #reverse contruye una url  lo uso ya que redirec no permite kwargs
-            url = reverse('gestion:detalle_actividad' , kwargs={'pk':self.kwargs['pk']})
+		if form.is_valid():
 			
-            return redirect(url)
+			#le quito el html al formulario que viene por el metodo post 
+			formulario_limpio = form.cleaned_data
 
-        
-        print(form.errors)
-            
-        return render(request, 'corp/editar_subActividad.html' , {'form':form , 'object': self.get_object})
-        
-            
 
-    def get_context_data(self , **kwargs):
+			#creo un objeto de mi modelo para usarlo para guardar 
+			sub_actividad_guuardar = self.model()
 
-        context= {}
+			#accedo a las propiedades de mi objeto
+			sub_actividad_guuardar.num_actividad = formulario_limpio['num_actividad']
+			sub_actividad_guuardar.nom_actividad= formulario_limpio['nom_actividad']
+			sub_actividad_guuardar.fecha_inicio = formulario_limpio['fecha_inicio']
+			sub_actividad_guuardar.fecha_fin = formulario_limpio['fecha_fin']
+			sub_actividad_guuardar.fecha_real = formulario_limpio['fecha_real']
+			sub_actividad_guuardar.impacto = formulario_limpio['impacto']
+			sub_actividad_guuardar.punto_critico = formulario_limpio['punto_critico']
+			sub_actividad_guuardar.id_activ = self.get_object()
+
+			sub_actividad_guuardar.save()
+
+			#reverse contruye una url  lo uso ya que redirec no permite kwargs
+			url = reverse('gestion:detalle_actividad' , kwargs={'pk':self.kwargs['pk']})
+			
+			return redirect(url)
+
+		
+		print(form.errors)
+			
+		return render(request, 'corp/editar_subActividad.html' , {'form':form , 'object': self.get_object})
+		
+			
+
+	def get_context_data(self , **kwargs):
+
+		context= {}
 	
-        context['form']=self.form_class
-        context['object']= self.get_object()
+		context['form']=self.form_class
+		context['object']= self.get_object()
 		
-        return context
+		return context
 
 
 
-    def  get(self , request , *args , **kwargs):
+	def  get(self , request , *args , **kwargs):
 		
 
 
-        return render(request , self.template_name , self.get_context_data())        
-            
+		return render(request , self.template_name , self.get_context_data())        
+			
 
 
 
@@ -320,118 +320,118 @@ class crear_sud_actividad(View):
 
 
 class lista_actividades(ListView):
-    
-    model = activ_principal
-    template_name = "corp/listar_actividad.html"
+	
+	model = activ_principal
+	template_name = "corp/listar_actividad.html"
 
 
-    def get_context_data(self , **kwargs):
-        
-        context = super().get_context_data(**kwargs)
-        
-        variable = self.request.user.estado
+	def get_context_data(self , **kwargs):
+		
+		context = super().get_context_data(**kwargs)
+		
+		variable = self.request.user.estado
 
-        if self.request.user.is_staff:
-            consulta = self.model.objects.all()
-            
-        else:
-            consulta = self.model.objects.filter(id_estado2=variable)
+		if self.request.user.is_staff:
+			consulta = self.model.objects.all()
+			
+		else:
+			consulta = self.model.objects.filter(id_estado2=variable)
 
-        
-        
+		
+		
 
-        context['object_list'] = consulta
-       
+		context['object_list'] = consulta
+	   
 
-        return context
+		return context
 
 
 
 class editar_actividad(UpdateView):
-    model= activ_principal
-    form_class =  activ_principalForm
-    template_name="corp/modal_editar_actividad.html"
-    #fields=['num_actividades','nom_actividades','indicadores','costo','avance_1','alcance','region', 'id_estado2']  
-    success_url = reverse_lazy('gestion:lista_actividades')
-    
+	model= activ_principal
+	form_class =  activ_principalForm
+	template_name="corp/modal_editar_actividad.html"
+	#fields=['num_actividades','nom_actividades','indicadores','costo','avance_1','alcance','region', 'id_estado2']  
+	success_url = reverse_lazy('gestion:lista_actividades')
+	
 
 #validarPermisosRequeridosMixin es un validador de permisos creado por mi y esta en Mixins.py
 class eliminar_actividad(validarPermisosRequeridosMixin , DeleteView):
-    permission_required = 'gestion.delete_activ_principal'
-    model = activ_principal
+	permission_required = 'gestion.delete_activ_principal'
+	model = activ_principal
 
-    template_name="corp/eliminar_actividad.html"
-    success_url = reverse_lazy('gestion:lista_actividades')
+	template_name="corp/eliminar_actividad.html"
+	success_url = reverse_lazy('gestion:lista_actividades')
 
 
 
 class detalle_actividad(DetailView):
-    second_model = sud_actividad
+	second_model = sud_actividad
    
-    template_name= 'corp/detalle_actvidad.html'
-    pk_url_kwargs= 'pk'	
-    queryset= activ_principal.objects.all()
+	template_name= 'corp/detalle_actvidad.html'
+	pk_url_kwargs= 'pk'	
+	queryset= activ_principal.objects.all()
 
 
-    """
-    las primeras lineas me traen solo la actividad que selecciono al darle al boton
-     detalle en la lista de actividades
-    y la siguiente funcion a continuacion lo que hago es traerme las actividades
-     a de esa actividad y mardarlas al templete para
-    listarlas"""
+	"""
+	las primeras lineas me traen solo la actividad que selecciono al darle al boton
+	 detalle en la lista de actividades
+	y la siguiente funcion a continuacion lo que hago es traerme las actividades
+	 a de esa actividad y mardarlas al templete para
+	listarlas"""
 
-    def get_context_data(self , **kwargs):
+	def get_context_data(self , **kwargs):
 
-        context = super().get_context_data(**kwargs)
-        
-        datos = self.second_model.objects.filter(id_activ=self.kwargs['pk'])
+		context = super().get_context_data(**kwargs)
+		
+		datos = self.second_model.objects.filter(id_activ=self.kwargs['pk'])
 
-        context['info']= datos
+		context['info']= datos
 
-        return context
+		return context
 
 
 class editar_sub_actividad(UpdateView):
 
-    model= sud_actividad
-    form_class = sud_actividadForm2   
-    template_name="corp/editar_subActividad.html"
-    def post(self , request , *args , **kwargs):
+	model= sud_actividad
+	form_class = sud_actividadForm2   
+	template_name="corp/editar_subActividad.html"
+	def post(self , request , *args , **kwargs):
 
-        instancia = self.model.objects.get(id=self.kwargs['pk'])
-        form = self.form_class(request.POST , instance=instancia)
-        if form.is_valid():
-            instancia = form.save(commit=False)
-            # Podemos guardarla cuando queramos
-            instancia.save()
+		instancia = self.model.objects.get(id=self.kwargs['pk'])
+		form = self.form_class(request.POST , instance=instancia)
+		if form.is_valid():
+			instancia = form.save(commit=False)
+			# Podemos guardarla cuando queramos
+			instancia.save()
 
-            url = reverse('gestion:detalle_actividad' , kwargs={'pk':self.kwargs['pk2']})
-            return redirect(url)
+			url = reverse('gestion:detalle_actividad' , kwargs={'pk':self.kwargs['pk2']})
+			return redirect(url)
 
-        return render(request , self.template_name , {'form':form})    
-    
+		return render(request , self.template_name , {'form':form})    
+	
 
-    
+	
 
 #validarPermisosRequeridosMixin es un validador de permisos creado por mi y esta en Mixins.py 
 class eliminar_sub_Actividad(validarPermisosRequeridosMixin , DeleteView):
-    permission_required = 'gestion.delete_sud_actividad'
-    model = sud_actividad
-    template_name="corp/eliminar_subActividad.html"
-    success_url = reverse_lazy('gestion:lista_actividades') 
+	permission_required = 'gestion.delete_sud_actividad'
+	model = sud_actividad
+	template_name="corp/eliminar_subActividad.html"
+	success_url = reverse_lazy('gestion:lista_actividades') 
 
 
 
-    def post(self , request , *args , **kwargs):
+	def post(self , request , *args , **kwargs):
 
-        instancia = self.model.objects.get(id=self.kwargs['pk'])
-        
-        
-        instancia.delete()
-           
+		instancia = self.model.objects.get(id=self.kwargs['pk'])
+		
+		
+		instancia.delete()
+		   
 
-        url = reverse('gestion:detalle_actividad' , kwargs={'pk':self.kwargs['pk2']})
-        return redirect(url)
+		url = reverse('gestion:detalle_actividad' , kwargs={'pk':self.kwargs['pk2']})
+		return redirect(url)
 
 
 
@@ -439,63 +439,63 @@ class eliminar_sub_Actividad(validarPermisosRequeridosMixin , DeleteView):
 
 class listar_user(ListView):
 
-    model = User
-    template_name = 'corp/lista_user.html'
+	model = User
+	template_name = 'corp/lista_user.html'
 
 
 class detalle_Usuario(DetailView):
    
    
-    template_name= 'corp/detalle_usuario.html'
-    pk_url_kwargs= 'pk'	
-    queryset= User.objects.all()
+	template_name= 'corp/detalle_usuario.html'
+	pk_url_kwargs= 'pk'	
+	queryset= User.objects.all()
 
-    #asi se puede acceder a los grupos
-    """dato =0 
-        for x in self.queryset:
-            if x.groups.filter(user=self.kwargs['pk']):
-                dato = x.groups.filter(user=self.kwargs['pk'])
+	#asi se puede acceder a los grupos
+	"""dato =0 
+		for x in self.queryset:
+			if x.groups.filter(user=self.kwargs['pk']):
+				dato = x.groups.filter(user=self.kwargs['pk'])
 
-        print(dato)  """
-
-
-    def get_context_data(self , **kwargs):
+		print(dato)  """
 
 
-        context = super().get_context_data(**kwargs)
+	def get_context_data(self , **kwargs):
 
-     
-        dato =0 
-        for x in self.queryset:
-            
-            dato = x.password
 
-        print(dato)         
-       
-       #context['object2']= User.groups.filter(user_id=1).exists()
+		context = super().get_context_data(**kwargs)
+
+	 
+		dato =0 
+		for x in self.queryset:
+			
+			dato = x.password
+
+		print(dato)         
+	   
+	   #context['object2']= User.groups.filter(user_id=1).exists()
 		
-        return context
+		return context
 
 class editar_usuario(UpdateView):
-    model= User
-    form_class =  update_Usuario
-    template_name ='corp/editar_usuario.html'
+	model= User
+	form_class =  update_Usuario
+	template_name ='corp/editar_usuario.html'
 
 
 
-    def post(self , request , *args , **kwargs):
+	def post(self , request , *args , **kwargs):
 
-        instancia = self.model.objects.get(id=self.kwargs['pk'])
-        form = self.form_class(request.POST , instance=instancia)
-        if form.is_valid():
-           
-            instancia.save()
+		instancia = self.model.objects.get(id=self.kwargs['pk'])
+		form = self.form_class(request.POST , instance=instancia)
+		if form.is_valid():
+		   
+			instancia.save()
 
-            url = reverse('gestion:detalle_usiarios' , kwargs={'pk':self.kwargs['pk']})
-            return redirect(url)
+			url = reverse('gestion:detalle_usiarios' , kwargs={'pk':self.kwargs['pk']})
+			return redirect(url)
 
-        return render(request , self.template_name , {'form':form})
-    
+		return render(request , self.template_name , {'form':form})
+	
 
 
 
@@ -504,67 +504,424 @@ class editar_usuario(UpdateView):
 
 
 class editar_contraseña_usuario(UpdateView):
-    model= User
-    form_class =  update_contraseña_Usuario
-    template_name ='corp/editarcontraseña_usuario.html'
-    
+	model= User
+	form_class =  update_contraseña_Usuario
+	template_name ='corp/editarcontraseña_usuario.html'
+	
 
 
 
   
-    def post(self , request , *args , **kwargs):
+	def post(self , request , *args , **kwargs):
 
-        instancia = self.model.objects.get(id=self.kwargs['pk'])
-        form = self.form_class(request.POST , instance=instancia)
-        if form.is_valid():
-            print(form.cleaned_data.get('password1'))
-            
-            instancia.set_password(form.cleaned_data.get('password'))
+		instancia = self.model.objects.get(id=self.kwargs['pk'])
+		form = self.form_class(request.POST , instance=instancia)
+		if form.is_valid():
+			print(form.cleaned_data.get('password1'))
+			
+			instancia.set_password(form.cleaned_data.get('password'))
 
-            
+			
 
-            instancia.save()
+			instancia.save()
 
-            url = reverse('gestion:detalle_usiarios' , kwargs={'pk':self.kwargs['pk']})
-            return redirect(url)
+			url = reverse('gestion:detalle_usiarios' , kwargs={'pk':self.kwargs['pk']})
+			return redirect(url)
 
-        return render(request , self.template_name , {'form':form})
+		return render(request , self.template_name , {'form':form})
 
 
 
 
 class eliminar_Usuario( DeleteView):
    
-    model = User
+	model = User
 
-    template_name="corp/eliminar_Usuario.html"
-    success_url = reverse_lazy('gestion:listar_usiarios')        
+	template_name="corp/eliminar_Usuario.html"
+	success_url = reverse_lazy('gestion:listar_usiarios')  
 
 
-     
+
+
+
+
+class reporte_excel(TemplateView):
+
+	def get(self , request , *args , **kwargs):
+		
+		
+
+		#if not dato and not dato2:
+		query = activ_principal.objects.all()
+
+		wb= Workbook()
+		ws = wb.active
+		#bandera = True
+		
+		controlador = 4
+		
+		
+		#print(sheet.colum)
+		ws['B1'].alignment = Alignment(horizontal = "center",vertical = "center")
+		ws['B1'].border = Border(left = Side(border_style = "thin"), right = Side(border_style = "thin"),
+									top = Side(border_style = "thin"), bottom = Side(border_style = "thin") )
+
+		ws['B1'].fill = PatternFill(start_color = 'f70202', end_color = 'f70202', fill_type = "solid")
+		ws['B1'].font = Font(name = 'Calibri', size = 20, bold = True)
+
+		ws['B1'] =  'CORPOELEC Plan De Accion ATIT'
+
+
+		ws.merge_cells('B1:E1')
+
+		ws.row_dimensions[1].height = 25
+
+		ws.column_dimensions['B'].width = 20
+		ws.column_dimensions['C'].width = 20
+		ws.column_dimensions['D'].width = 20
+		ws.column_dimensions['E'].width = 20
+		ws.column_dimensions['F'].width = 20
+		ws.column_dimensions['G'].width = 20
+		ws.column_dimensions['H'].width = 20
+		ws.column_dimensions['I'].width = 25
+		ws.column_dimensions['J'].width = 25
+
+		ws.column_dimensions['K'].width = 20
+		ws.column_dimensions['L'].width = 20
+		
+		
+		
+
+		ws['B3'].alignment = Alignment(horizontal = "center", vertical = "center")
+		ws['B3'].border = Border(left = Side(border_style = "thin"), right = Side(border_style = "thin"),
+									top = Side(border_style = "thin"), bottom = Side(border_style = "thin") )
+		ws['B3'].fill = PatternFill(start_color = '0550e8', end_color = '0550e8', fill_type = "solid")
+		ws['B3'].font = Font(name = 'Calibro', size = 10, bold = True)
+		ws['B3'] = 'num actividades'
+
+		ws['C3'].alignment = Alignment(horizontal = "center", vertical = "center")
+		ws['C3'].border = Border(left = Side(border_style = "thin"), right = Side(border_style = "thin"),
+									top = Side(border_style = "thin"), bottom = Side(border_style = "thin") )
+		ws['C3'].fill = PatternFill(start_color = '0550e8', end_color = '0550e8', fill_type = "solid")
+		ws['C3'].font = Font(name = 'Calibro', size = 10, bold = True)
+		ws['C3'] = 'nom actividades'
+
+
+
+		ws['D3'].alignment = Alignment(horizontal = "center", vertical = "center")
+		ws['D3'].border = Border(left = Side(border_style = "thin"), right = Side(border_style = "thin"),
+									top = Side(border_style = "thin"), bottom = Side(border_style = "thin") )
+		ws['D3'].fill = PatternFill(start_color = '0550e8', end_color = '0550e8', fill_type = "solid")
+		ws['D3'].font = Font(name = 'Calibro', size = 10, bold = True)
+		ws['D3'] = 'Indicadores'
+		ws['E3'].alignment = Alignment(horizontal = "center", vertical = "center")
+		ws['E3'].border = Border(left = Side(border_style = "thin"), right = Side(border_style = "thin"),
+									top = Side(border_style = "thin"), bottom = Side(border_style = "thin") )
+		ws['E3'].fill = PatternFill(start_color = '0550e8', end_color = '0550e8', fill_type = "solid")
+		ws['E3'].font = Font(name = 'Calibro', size = 10, bold = True)
+		ws['E3'] = 'Region'
+
+		ws['F3'].alignment = Alignment(horizontal = "center", vertical = "center")
+		ws['F3'].border = Border(left = Side(border_style = "thin"), right = Side(border_style = "thin"),
+									top = Side(border_style = "thin"), bottom = Side(border_style = "thin") )
+		ws['F3'].fill = PatternFill(start_color = '0550e8', end_color = '0550e8', fill_type = "solid")
+		ws['F3'].font = Font(name = 'Calibro', size = 10, bold = True)
+		ws['F3'] = 'Estado'
+
+		ws['G3'].alignment = Alignment(horizontal = "center", vertical = "center")
+		ws['G3'].border = Border(left = Side(border_style = "thin"), right = Side(border_style = "thin"),
+									top = Side(border_style = "thin"), bottom = Side(border_style = "thin") )
+		ws['G3'].fill = PatternFill(start_color = '0550e8', end_color = '0550e8', fill_type = "solid")
+		ws['G3'].font = Font(name = 'Calibro', size = 10, bold = True)
+		ws['G3'] = 'Fecha Inicio'
+
+		ws['H3'].alignment = Alignment(horizontal = "center", vertical = "center")
+		ws['H3'].border = Border(left = Side(border_style = "thin"), right = Side(border_style = "thin"),
+									top = Side(border_style = "thin"), bottom = Side(border_style = "thin") )
+		ws['H3'].fill = PatternFill(start_color = '0550e8', end_color = '0550e8', fill_type = "solid")
+		ws['H3'].font = Font(name = 'Calibro', size = 10, bold = True)
+		ws['H3'] = 'Fecha fin'
+
+
+		ws['I3'].alignment = Alignment(horizontal = "center", vertical = "center")
+		ws['I3'].border = Border(left = Side(border_style = "thin"), right = Side(border_style = "thin"),
+									top = Side(border_style = "thin"), bottom = Side(border_style = "thin") )
+		ws['I3'].fill = PatternFill(start_color = '0550e8', end_color = '0550e8', fill_type = "solid")
+		ws['I3'].font = Font(name = 'Calibro', size = 10, bold = True)
+		ws['I3'] = 'Avance fisico programado'
+
+
+
+		ws['J3'].alignment = Alignment(horizontal = "center", vertical = "center")
+		ws['J3'].border = Border(left = Side(border_style = "thin"), right = Side(border_style = "thin"),
+									top = Side(border_style = "thin"), bottom = Side(border_style = "thin") )
+		ws['J3'].fill = PatternFill(start_color = '0550e8', end_color = '0550e8', fill_type = "solid")
+		ws['J3'].font = Font(name = 'Calibro', size = 10, bold = True)
+		ws['J3'] = 'Avance fisico ejecutado'
+
+
+
+		ws['K3'].alignment = Alignment(horizontal = "center", vertical = "center")
+		ws['K3'].border = Border(left = Side(border_style = "thin"), right = Side(border_style = "thin"),
+								   top = Side(border_style = "thin"), bottom = Side(border_style = "thin") )
+		ws['K3'].fill = PatternFill(start_color = '0550e8', end_color = '0550e8', fill_type = "solid")
+		ws['K3'].font = Font(name = 'Calibro', size = 10, bold = True)
+		ws['K3'] = 'Impacto'
+
+
+
+
+		ws['L3'].alignment = Alignment(horizontal = "center", vertical = "center")
+		ws['L3'].border = Border(left = Side(border_style = "thin"), right = Side(border_style = "thin"),
+								   top = Side(border_style = "thin"), bottom = Side(border_style = "thin") )
+		ws['L3'].fill = PatternFill(start_color = '0550e8', end_color = '0550e8', fill_type = "solid")
+		ws['L3'].font = Font(name = 'Calibro', size = 10, bold = True)
+		ws['L3'] = 'Punto criticio'
+
+
+
+	   
+
+
+
+		
+
+		cont= 1
+		for q in query:
+			print(q.avance_1 , "avanceeeeeee")
+			print(type(q.avance_1) , "avanceeeeeee")
+			
+
+			
+		   
+		   
+			#Pintamos los datos en el reporte
+			
+			ws.cell(row = controlador , column = 2).alignment = Alignment(horizontal = "center")
+			ws.cell(row = controlador , column = 2).border = Border(left = Side(border_style = "thin"), right = Side(border_style = "thin"),
+									top = Side(border_style = "thin"), bottom = Side(border_style = "thin") )
+			ws.cell(row = controlador, column = 2).font = Font(name = 'Calibri', size = 8)
+			ws.cell(row = controlador, column = 2).fill = PatternFill(start_color = '949aa6', end_color = '949aa6', fill_type = "solid")
+			ws.cell(row = controlador, column = 2).value = q.num_actividades
+
+			ws.cell(row = controlador, column = 3).alignment = Alignment(horizontal = "center")
+			ws.cell(row = controlador, column = 3).border = Border(left = Side(border_style = "thin"), right = Side(border_style = "thin"),
+																	top = Side(border_style = "thin"), bottom = Side(border_style = "thin") )
+			ws.cell(row = controlador, column = 3).font = Font(name = 'Calibri', size = 8)
+			ws.cell(row = controlador, column = 3).fill = PatternFill(start_color = '949aa6', end_color = '949aa6', fill_type = "solid")
+
+			ws.cell(row = controlador, column = 3).value = q.nom_actividades
+
+			ws.cell(row = controlador, column = 4).alignment = Alignment(horizontal = "center")
+			ws.cell(row = controlador, column = 4).border = Border(left = Side(border_style = "thin"), right = Side(border_style = "thin"),
+									top = Side(border_style = "thin"), bottom = Side(border_style = "thin") )
+			ws.cell(row = controlador, column = 4).font = Font(name = 'Calibri', size = 8)
+			ws.cell(row = controlador, column = 4).fill = PatternFill(start_color = '949aa6', end_color = '949aa6', fill_type = "solid")
+
+			ws.cell(row = controlador, column = 4).value = q.indicadores
+
+
+			ws.cell(row = controlador, column = 5).alignment = Alignment(horizontal = "center")
+			ws.cell(row = controlador, column = 5).border = Border(left = Side(border_style = "thin"), right = Side(border_style = "thin"),
+									top = Side(border_style = "thin"), bottom = Side(border_style = "thin") )
+			ws.cell(row = controlador, column = 5).font = Font(name = 'Calibri', size = 8)
+			ws.cell(row = controlador, column = 5).fill = PatternFill(start_color = '949aa6', end_color = '949aa6', fill_type = "solid")
+
+			ws.cell(row = controlador, column = 5).value = "CENTRAL"
+
+
+
+
+			ws.cell(row = controlador, column = 6).alignment = Alignment(horizontal = "center")
+			ws.cell(row = controlador, column = 6).border = Border(left = Side(border_style = "thin"), right = Side(border_style = "thin"),
+									top = Side(border_style = "thin"), bottom = Side(border_style = "thin") )
+			ws.cell(row = controlador, column = 6).font = Font(name = 'Calibri', size = 8)
+			ws.cell(row = controlador, column = 6).fill = PatternFill(start_color = '949aa6', end_color = '949aa6', fill_type = "solid")
+
+			ws.cell(row = controlador, column = 6).value = q.id_estado2
+
+
+
+			ws.cell(row = controlador, column = 7).alignment = Alignment(horizontal = "center")
+			ws.cell(row = controlador, column = 7).border = Border(left = Side(border_style = "thin"), right = Side(border_style = "thin"),
+									top = Side(border_style = "thin"), bottom = Side(border_style = "thin") )
+			ws.cell(row = controlador, column = 7).font = Font(name = 'Calibri', size = 8)
+			ws.cell(row = controlador, column = 7).fill = PatternFill(start_color = '949aa6', end_color = '949aa6', fill_type = "solid")
+
+			ws.cell(row = controlador, column = 7).value = ""
+
+
+			ws.cell(row = controlador, column = 8).alignment = Alignment(horizontal = "center")
+			ws.cell(row = controlador, column = 8).border = Border(left = Side(border_style = "thin"), right = Side(border_style = "thin"),
+									top = Side(border_style = "thin"), bottom = Side(border_style = "thin") )
+			ws.cell(row = controlador, column = 8).font = Font(name = 'Calibri', size = 8)
+			ws.cell(row = controlador, column = 8).fill = PatternFill(start_color = '949aa6', end_color = '949aa6', fill_type = "solid")
+
+			ws.cell(row = controlador, column = 8).value = ""
+
+
+
+
+
+			ws.cell(row = controlador, column = 9).alignment = Alignment(horizontal = "center")
+			ws.cell(row = controlador, column = 9).border = Border(left = Side(border_style = "thin"), right = Side(border_style = "thin"),
+									top = Side(border_style = "thin"), bottom = Side(border_style = "thin") )
+			ws.cell(row = controlador, column = 9).font = Font(name = 'Calibri', size = 8)
+			ws.cell(row = controlador, column = 9).fill = PatternFill(start_color = '949aa6', end_color = '949aa6', fill_type = "solid")
+
+			ws.cell(row = controlador, column = 9).value = q.avance_1	
+			
+
+			ws.cell(row = controlador, column = 10).alignment = Alignment(horizontal = "center")
+			ws.cell(row = controlador, column = 10).border = Border(left = Side(border_style = "thin"), right = Side(border_style = "thin"),
+									top = Side(border_style = "thin"), bottom = Side(border_style = "thin") )
+			ws.cell(row = controlador, column = 10).font = Font(name = 'Calibri', size = 8)
+			ws.cell(row = controlador, column = 10).fill = PatternFill(start_color = '949aa6', end_color = '949aa6', fill_type = "solid")
+
+			ws.cell(row = controlador, column = 10).value = "CALCULO"
+
+
+
+			ws.cell(row = controlador, column = 11).alignment = Alignment(horizontal = "center")
+			ws.cell(row = controlador, column = 11).border = Border(left = Side(border_style = "thin"), right = Side(border_style = "thin"),
+									top = Side(border_style = "thin"), bottom = Side(border_style = "thin") )
+			ws.cell(row = controlador, column = 11).font = Font(name = 'Calibri', size = 8)
+			ws.cell(row = controlador, column = 11).fill = PatternFill(start_color = '949aa6', end_color = '949aa6', fill_type = "solid")
+
+			ws.cell(row = controlador, column = 11).value = ""
+
+
+
+			ws.cell(row = controlador, column = 12).alignment = Alignment(horizontal = "center")
+			ws.cell(row = controlador, column = 12).border = Border(left = Side(border_style = "thin"), right = Side(border_style = "thin"),
+									top = Side(border_style = "thin"), bottom = Side(border_style = "thin") )
+			ws.cell(row = controlador, column = 12).font = Font(name = 'Calibri', size = 8)
+			ws.cell(row = controlador, column = 12).fill = PatternFill(start_color = '949aa6', end_color = '949aa6', fill_type = "solid")
+
+			ws.cell(row = controlador, column = 12).value = ""
+
+			
+
+
+			query2 = sud_actividad.objects.filter(id_activ = q.id)
+			
+			for datos in query2:
+				controlador+=1
+				
+				ws.cell(row = controlador , column = 2).alignment = Alignment(horizontal = "center")
+				ws.cell(row = controlador , column = 2).border = Border(left = Side(border_style = "thin"), right = Side(border_style = "thin"),
+										top = Side(border_style = "thin"), bottom = Side(border_style = "thin") )
+				ws.cell(row = controlador, column = 2).font = Font(name = 'Calibri', size = 8)
+				ws.cell(row = controlador, column = 2).value = datos.num_actividad
+
+				ws.cell(row = controlador, column = 3).alignment = Alignment(horizontal = "center")
+				ws.cell(row = controlador, column = 3).border = Border(left = Side(border_style = "thin"), right = Side(border_style = "thin"),
+																		top = Side(border_style = "thin"), bottom = Side(border_style = "thin") )
+				ws.cell(row = controlador, column = 3).font = Font(name = 'Calibri', size = 8)
+				ws.cell(row = controlador, column = 3).value = datos.nom_actividad
+
+				ws.cell(row = controlador, column = 4).alignment = Alignment(horizontal = "center")
+				ws.cell(row = controlador, column = 4).border = Border(left = Side(border_style = "thin"), right = Side(border_style = "thin"),
+										top = Side(border_style = "thin"), bottom = Side(border_style = "thin") )
+				ws.cell(row = controlador, column = 4).font = Font(name = 'Calibri', size = 8)
+				ws.cell(row = controlador, column = 4).value = ""
+
+
+				ws.cell(row = controlador, column = 5).alignment = Alignment(horizontal = "center")
+				ws.cell(row = controlador, column = 5).border = Border(left = Side(border_style = "thin"), right = Side(border_style = "thin"),
+										top = Side(border_style = "thin"), bottom = Side(border_style = "thin") )
+				ws.cell(row = controlador, column = 5).font = Font(name = 'Calibri', size = 8)
+				ws.cell(row = controlador, column = 5).value = "CENTRAL"
+
+
+
+
+				ws.cell(row = controlador, column = 6).alignment = Alignment(horizontal = "center")
+				ws.cell(row = controlador, column = 6).border = Border(left = Side(border_style = "thin"), right = Side(border_style = "thin"),
+										top = Side(border_style = "thin"), bottom = Side(border_style = "thin") )
+				ws.cell(row = controlador, column = 6).font = Font(name = 'Calibri', size = 8)
+				ws.cell(row = controlador, column = 6).value = datos.estado
+
+
+				ws.cell(row = controlador, column = 7).alignment = Alignment(horizontal = "center")
+				ws.cell(row = controlador, column = 7).border = Border(left = Side(border_style = "thin"), right = Side(border_style = "thin"),
+										top = Side(border_style = "thin"), bottom = Side(border_style = "thin") )
+				ws.cell(row = controlador, column = 7).font = Font(name = 'Calibri', size = 8)
+				ws.cell(row = controlador, column = 7).value = datos.fecha_inicio
+				
+
+				ws.cell(row = controlador, column = 8).alignment = Alignment(horizontal = "center")
+				ws.cell(row = controlador, column = 8).border = Border(left = Side(border_style = "thin"), right = Side(border_style = "thin"),
+										top = Side(border_style = "thin"), bottom = Side(border_style = "thin") )
+				ws.cell(row = controlador, column = 8).font = Font(name = 'Calibri', size = 8)
+				ws.cell(row = controlador, column = 8).value = datos.fecha_fin
+
+				ws.cell(row = controlador, column = 9).alignment = Alignment(horizontal = "center")
+				ws.cell(row = controlador, column = 9).border = Border(left = Side(border_style = "thin"), right = Side(border_style = "thin"),
+										top = Side(border_style = "thin"), bottom = Side(border_style = "thin") )
+				ws.cell(row = controlador, column = 9).font = Font(name = 'Calibri', size = 8)
+				ws.cell(row = controlador, column = 9).value = "0.00%"
+
+				ws.cell(row = controlador, column = 10).alignment = Alignment(horizontal = "center")
+				ws.cell(row = controlador, column = 10).border = Border(left = Side(border_style = "thin"), right = Side(border_style = "thin"),
+										top = Side(border_style = "thin"), bottom = Side(border_style = "thin") )
+				ws.cell(row = controlador, column = 10).font = Font(name = 'Calibri', size = 8)
+				ws.cell(row = controlador, column = 10).value = "0.00%"
+
+
+				ws.cell(row = controlador, column = 11).alignment = Alignment(horizontal = "center")
+				ws.cell(row = controlador, column = 11).border = Border(left = Side(border_style = "thin"), right = Side(border_style = "thin"),
+										top = Side(border_style = "thin"), bottom = Side(border_style = "thin") )
+				ws.cell(row = controlador, column = 11).font = Font(name = 'Calibri', size = 8)
+				ws.cell(row = controlador, column = 11).value = datos.impacto
+
+				ws.cell(row = controlador, column = 12).alignment = Alignment(horizontal = "center")
+				ws.cell(row = controlador, column = 12).border = Border(left = Side(border_style = "thin"), right = Side(border_style = "thin"),
+										top = Side(border_style = "thin"), bottom = Side(border_style = "thin") )
+				ws.cell(row = controlador, column = 12).font = Font(name = 'Calibri', size = 8)
+				ws.cell(row = controlador, column = 12).value = datos.punto_critico
+
+				
+				
+
+			controlador +=1
+			
+
+		#establecer nombre de archivo
+
+		nombre_archivo ="PlanDeAccionATIT.xlsx"
+
+		response = HttpResponse(content_type= 'application/ms-excel')
+		contenido = 'attachment; filename = {0}'.format(nombre_archivo)
+		response['Content-Disposition'] = contenido
+		wb.save(response)
+		return response	
+
+
+	 
 
 
   
 
 
 
-    
+	
 
 
-    
+	
 
 
-        
-
-
-
+		
 
 
 
 
-        
 
-    
+
+
+		
+
+	
 
 
 
