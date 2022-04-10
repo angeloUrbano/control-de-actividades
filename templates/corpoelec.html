@@ -112,7 +112,7 @@
                        
                        <a class="collapse-item" href="{% url 'gestion:crear_user'%}"> Crear usuarios</a>
                        <a class="collapse-item" href="{% url 'gestion:listar_usiarios'%}">Listar Usuarios</a>
-                       
+                        <a class="collapse-item" href="{% url  'gestion:genera_reportes' %}">Reporte</a>
                        
                         {% endif%}
                    
@@ -124,8 +124,8 @@
                     </div>
                 </div>
             </li>
-
-
+            
+            
 
 
 
@@ -145,6 +145,9 @@
             </div>
 
         </ul>
+
+
+        
         <!-- End of Sidebar -->
 
         <!-- Content Wrapper -->
@@ -162,7 +165,9 @@
                             <i class="fa fa-bars"></i>
                         </button>
                     </form>
-
+                    
+                        <a class="collapse-item"  style="color: black;" href="{% url  'logout' %}"> <i class="fas fa-sign-out-alt"></i> cerrar sesion</a>
+ 
                     <!-- Topbar Search -->
               
                     <!-- Topbar Navbar -->
@@ -182,7 +187,8 @@
 
 		                   	
                          <span class="mr-2 d-none d-lg-inline text-gray-600 small"> </span>
-                	      
+                         <h6 style="color:black;"><i class="fas fa-user"></i> {{request.user.get_full_name}}</h6>
+
                          {% endif%}
                             </a>
                             <!-- Dropdown - User Information -->

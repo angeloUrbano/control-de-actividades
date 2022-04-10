@@ -120,6 +120,7 @@ class activ_principal(models.Model):
     alcance = models.TextField('Alcance',blank=False , null=True)
     region = models.CharField (choices=REGION_CHOICES, max_length=20 , blank=False, null= False)
     id_estado2 =  models.CharField(choices=STATE_CHOICES, max_length=20 , blank=False, null= False)
+    creado = models.DateTimeField(auto_now_add=True)
 
 
     
@@ -147,6 +148,7 @@ class  sud_actividad(models.Model):
     nom_actividad = models.CharField( max_length=500 ,   blank=False)
     fecha_inicio = models.DateField()
     fecha_fin = models.DateField()
+    fecha_fin_real = models.DateField(blank= True, null=True)
     avance_programado = models.FloatField('avance',blank= False, null=False)
     avance_ejecutado = models.FloatField('avance',blank= False, null=False)
     impacto = models.TextField( max_length=500, blank=False, null= True)

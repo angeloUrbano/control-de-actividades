@@ -5,7 +5,10 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 import os
 from datetime import date
-from datetime import datetime
+from datetime import datetime  
+from django.utils import timezone 
+import pytz
+
 
 from django.views.generic.edit import DeleteView, UpdateView
 from openpyxl.styles.fills import FILL_NONE
@@ -314,6 +317,8 @@ class crear_sud_actividad(View):
 			sub_actividad_guuardar.nom_actividad= formulario_limpio['nom_actividad']
 			sub_actividad_guuardar.fecha_inicio = formulario_limpio['fecha_inicio']
 			sub_actividad_guuardar.fecha_fin = formulario_limpio['fecha_fin']
+			sub_actividad_guuardar.fecha_fin_real = formulario_limpio['fecha_fin_real']
+
 			sub_actividad_guuardar.estado = variable.id_estado2
 			sub_actividad_guuardar.impacto = formulario_limpio['impacto']
 			sub_actividad_guuardar.punto_critico = formulario_limpio['punto_critico']
@@ -591,51 +596,99 @@ class reporte_excel(TemplateView):
 
 	def get(self , request , *args , **kwargs):
 
+
+		variable = self.request.user.estado
+
+	
+
 	
 		#query = Order.objects.filter(ordered_date__range=[dato, dato2])
 		if request.GET.get("customCheck1"):
-			print("activo primer checkbox")
+			
 
 			anio = int(request.GET.get("prueba2")) 
-			primera_fecha = datetime(anio , 1 , 1)
-			segunda_fecha = datetime(anio , 4 , 30)
+			primera_fecha = datetime(anio , 1 , 1 , tzinfo=pytz.UTC)
+			segunda_fecha = datetime(anio , 4 , 30 , tzinfo=pytz.UTC)
 
-			print(primera_fecha ,  segunda_fecha)
+			if self.request.user.is_staff or variable == "Aragua" :
+				
+				#imprimo todas las actividades 
+				query = activ_principal.objects.filter(creado__range=[primera_fecha, segunda_fecha])
+			else:
+				#filtro las actividades dependiendo del estado 
+				query = activ_principal.objects.filter(creado__range=[primera_fecha, segunda_fecha] , id_estado2=variable)
+
+			
 			
 		else:
 			if 	request.GET.get("customCheck2"):
-				print("activo segundo checkbox")
+				
 				anio = int(request.GET.get("prueba2")) 
-				primera_fecha = datetime(anio , 5 , 1)
-				segunda_fecha = datetime(anio , 8 , 31)
+				primera_fecha = datetime(anio , 5 , 1 , tzinfo=pytz.UTC)
+				segunda_fecha = datetime(anio , 8 , 31 , tzinfo=pytz.UTC)
 
-				print(primera_fecha ,  segunda_fecha)
+				if self.request.user.is_staff or variable == "Aragua" :
+				
+					#imprimo todas las actividades 
+					query = activ_principal.objects.filter(creado__range=[primera_fecha, segunda_fecha])
+				else:
+					#filtro las actividades dependiendo del estado 
+					query = activ_principal.objects.filter(creado__range=[primera_fecha, segunda_fecha] , id_estado2=variable)
+
+
+
+
+				
+				
+				
 				
 			else:
 				if request.GET.get("customCheck3"):
-					print("activo tercero checkbox")
+					
 					anio = int(request.GET.get("prueba2")) 
-					primera_fecha = datetime(anio , 9 , 1)
-					segunda_fecha = datetime(anio , 12 , 31)
+					primera_fecha = datetime(anio , 9 , 1 , tzinfo=pytz.UTC)
+					segunda_fecha = datetime(anio , 12 , 31 , tzinfo=pytz.UTC)
 
-					print(primera_fecha ,  segunda_fecha)
+					if self.request.user.is_staff or variable == "Aragua" :
+				
+						#imprimo todas las actividades 
+						query = activ_principal.objects.filter(creado__range=[primera_fecha, segunda_fecha])
+					else:
+
+						#filtro las actividades dependiendo del estado 
+						query = activ_principal.objects.filter(creado__range=[primera_fecha, segunda_fecha] , id_estado2=variable)
+
+
+					
 				else:
 					if request.GET.get("customCheck4"):
-						print("activo cuarto checkbox")
+						
 						anio = int(request.GET.get("prueba2")) 
-						primera_fecha = datetime(anio , 1 , 1)
-						segunda_fecha = datetime(anio , 12 , 31)
+						primera_fecha = datetime(anio , 1 , 1 , tzinfo=pytz.UTC)
+						segunda_fecha = datetime(anio , 12 , 31 , tzinfo=pytz.UTC)
+						
+						if self.request.user.is_staff or variable == "Aragua" :
+				
+							#imprimo todas las actividades 
+							query = activ_principal.objects.filter(creado__range=[primera_fecha, segunda_fecha])
+						else:
+							#filtro las actividades dependiendo del estado 
+							query = activ_principal.objects.filter(creado__range=[primera_fecha, segunda_fecha] , id_estado2=variable)
 
-						print(primera_fecha ,  segunda_fecha)
+
+						
 
 
 
 		
 		
-		"""currentDir= os.path.abspath(os.path.dirname(__file__)) 
+		currentDir= os.path.abspath(os.path.dirname(__file__)) 
 		filepath=os.path.join(currentDir,"panaderiaG.jpg")
 		#if not dato and not dato2:
-		query = activ_principal.objects.all()
+		
+
+
+	
 
 		wb= Workbook()
 		ws = wb.active
@@ -849,7 +902,7 @@ class reporte_excel(TemplateView):
 			ws.cell(row = controlador, column = 8).value = ""
 
 
-			calculo del promedio de avance programado 
+			#calculo del promedio de avance programado 
 			query4 = sud_actividad.objects.filter(id_activ = q.id)
 
 			suma=0
@@ -875,7 +928,7 @@ class reporte_excel(TemplateView):
 			
 			
 			
-			 calculo del promedio de avance ejecutado 
+			 #calculo del promedio de avance ejecutado 
 			query3 = sud_actividad.objects.filter(id_activ = q.id)
 
 			suma=0
@@ -1016,7 +1069,7 @@ class reporte_excel(TemplateView):
 		response['Content-Disposition'] = contenido
 		wb.save(response)
 		return response	
-"""
+
 
 
 

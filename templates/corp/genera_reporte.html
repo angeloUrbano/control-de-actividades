@@ -26,7 +26,7 @@
     
      
   
-<form  action="{% url 'gestion:reporte' %}">
+<form  action="{% url 'gestion:reporte' %}" id="form_nombre">
 
 
 
@@ -163,6 +163,47 @@ function ActivarCasilla()
 
 
 }
+
+
+var form = document.getElementById("form_nombre");
+
+form.addEventListener("submit" , function(event) {
+	var lista=[]
+	
+	var dato1 = document.forms["form_nombre"]["customCheck1"].checked 
+	var dato2 = document.forms["form_nombre"]["customCheck2"].checked 
+	var dato3 = document.forms["form_nombre"]["customCheck3"].checked 
+	var dato4 = document.forms["form_nombre"]["customCheck4"].checked 
+
+
+	lista.push(dato1)
+	lista.push(dato2)
+	lista.push(dato3)
+	lista.push(dato4)
+	
+
+
+
+	var condicion_envio = false ;
+	for (let index = 0; index < lista.length; index++) {
+
+		if (lista[index]== true) {
+			
+			condicion_envio = true;
+		}
+		
+		
+	}
+
+	if (condicion_envio == false) {
+		event.preventDefault();
+	alert("Debe seleccionar el rango de fechas del reporte");	
+	}
+	
+	
+})
+
+
 
 
 	

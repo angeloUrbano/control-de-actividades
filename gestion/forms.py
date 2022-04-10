@@ -473,7 +473,7 @@ class sud_actividadForm2(forms.ModelForm):
 	class Meta:
 
 		model= sud_actividad
-		fields= ['num_actividad','nom_actividad','fecha_inicio','fecha_fin','impacto','punto_critico' ,  'avance_programado' , 'avance_ejecutado']
+		fields= ['num_actividad','nom_actividad','fecha_inicio','fecha_fin', 'fecha_fin_real','impacto','punto_critico' ,  'avance_programado' , 'avance_ejecutado']
 
 
 
@@ -484,7 +484,7 @@ class sud_actividadForm2(forms.ModelForm):
 			'Nombre actividad':'nom_actividad',
 			'fecha inicio': 'fecha_inicio',
 			'fecha fin': 'fecha_fin',
-		
+			'fecha fin real': 'fecha_fin_real',
 			'impacto':'impacto',
 			'punto critico':'punto_critico',
 			'avance_programado':'Avance Programado',
@@ -499,7 +499,7 @@ class sud_actividadForm2(forms.ModelForm):
 			'nom_actividad':forms.TextInput(attrs={'class':'form-control'}),
 			'fecha_inicio': forms.DateInput(attrs={'type':'date' , 'class':'form-control'}),
 			'fecha_fin': forms.DateInput(attrs={'type':'date' , 'class':'form-control'}),
-			
+			'fecha_fin_real': forms.DateInput(attrs={'type':'date' , 'class':'form-control'}),
 			'impacto':forms.Textarea(attrs={'class':'form-control'}),
 			'punto_critico':forms.TextInput(attrs={'class':'form-control'}),
 			'avance_programado': forms.NumberInput(attrs={'class':'form-control'}),
