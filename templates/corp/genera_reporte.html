@@ -1,0 +1,186 @@
+{% extends "corpoelec.html" %}
+
+
+
+{% block titulo %}
+
+    <title> Actividades </title>
+    
+ {% endblock titulo %}}
+
+{%block content%}
+
+
+<div class="row justify-content-md-center ">
+  <div class="col-sm-6">
+    <div class="card">
+<div class="card">
+  
+  <div class="card-body">
+    <h3 style="text-align: center; background-color: rgb(0, 68, 255); color:black;" class="card-header">Generar reporte</h3>
+    <p class="card-text">
+      
+    </p>
+    
+    
+    
+     
+  
+<form  action="{% url 'gestion:reporte' %}">
+
+
+
+
+
+
+
+<div class="custom-control custom-checkbox">
+	<input type="checkbox" name="customCheck1" id="customCheck1" onclick="prueba() ; ActivarCasilla(); " >
+	<label  for="customCheck1">Primer cuatrimestre del año </label>
+</div>
+
+<br>
+<div class="custom-control custom-checkbox">
+	<input type="checkbox" name="customCheck2" id="customCheck2" onclick="prueba() ; ActivarCasilla();" >
+	<label  for="customCheck2">Segundo cuatrimestre del año </label>
+</div>
+<br>
+
+<div class="custom-control custom-checkbox">
+	<input type="checkbox" name="customCheck3"  id="customCheck3" onclick="prueba() ; ActivarCasilla();" >
+	<label for="customCheck3">Tercero cuatrimestre del año </label>
+</div>
+
+
+
+<br>
+
+<div class="custom-control custom-checkbox">
+	<input type="checkbox" name="customCheck4"  id="customCheck4" onclick="prueba() ; ActivarCasilla();" >
+	<label  for="customCheck4">Todas las actividades del año</label>
+</div>
+
+<br>
+
+
+
+<select class="custom-select"  name="prueba2" id ="mySelect" >
+	
+
+</select>
+
+
+
+
+    
+  <button   style="border-radius: 15px; text-align: center; font-family: cursive" class="btn btn-success btn-block mt-5" type="submit">Crear reporte</button>
+
+  
+</form> 
+
+
+ 
+
+
+
+
+
+</div>
+</div>
+ </div>
+</div>
+  </div>
+</div>
+
+</div>
+</div>
+
+
+
+
+<script>
+
+	
+
+function prueba () {
+
+	for (let i = 1985; i <= 2055; i++) {
+		$('#mySelect').append($('<option>', {
+		value: i,
+		text: i
+	
+}))};
+	
+}
+
+
+
+
+function ActivarCasilla() 
+{
+
+	$("#customCheck1").on('change' , function (ev) {
+		ev.preventDefault();
+		$("#customCheck1").prop("checked" , true);
+		$("#customCheck2").prop("checked" , false);
+		$("#customCheck3").prop("checked" , false);
+		$("#customCheck4").prop("checked" , false);
+		
+	})
+
+
+
+
+	$("#customCheck2").on('change' , function (ev) {
+		ev.preventDefault();
+		$("#customCheck2").prop("checked" , true);
+		$("#customCheck1").prop("checked" , false);
+		$("#customCheck3").prop("checked" , false);
+		$("#customCheck4").prop("checked" , false);
+	})
+
+
+
+	$("#customCheck3").on('change' , function (ev) {
+		ev.preventDefault();
+		$("#customCheck3").prop("checked" , true);
+		$("#customCheck1").prop("checked" , false);
+		$("#customCheck2").prop("checked" , false);
+		$("#customCheck4").prop("checked" , false);
+	})
+
+
+
+	$("#customCheck4").on('change' , function (ev) {
+		ev.preventDefault();
+		$("#customCheck4").prop("checked" , true);
+		$("#customCheck1").prop("checked" , false);
+		$("#customCheck2").prop("checked" , false);
+		$("#customCheck3").prop("checked" , false);
+	})
+
+
+
+
+}
+
+
+	
+</script>
+
+
+
+
+
+
+
+
+
+
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+  
+{%endblock content%}
+
+
+

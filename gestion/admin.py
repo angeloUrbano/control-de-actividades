@@ -9,7 +9,7 @@ class activ_principalAdmin(admin.ModelAdmin):
 
     search_fields=['nom_actividades',]
    
-    list_display=('nom_actividades','indicadores','costo','region')
+    list_display=('nom_actividades','indicadores','region')
 
  
 

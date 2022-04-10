@@ -13,9 +13,9 @@
         <li class="list-group-item">Nombre de actividad : {{object.nom_actividades}}</li>
 
         <li class="list-group-item"> Indicadores:  {{object.indicadores}}</li>
-        <li class="list-group-item"> Costo : {{object.costo}}</li>
+        
 
-        <li class="list-group-item"> avance : {{object.avance_1}}</li>
+        
         <li class="list-group-item">Alcance : {{object.alcance}}</li>
         <li class="list-group-item">Estado : {{object.id_estado2}}</li>
 
@@ -42,9 +42,10 @@
             <th scope="col" style="color: blanchedalmond;">nombre</th>
             <th scope="col" style="color: blanchedalmond;">inicio</th>
             <th scope="col" style="color: blanchedalmond;">fin</th>
-            <th scope="col" style="color: blanchedalmond;">fin real</th>
+            <th scope="col" style="color: blanchedalmond;">avance Pro.</th>
+            <th scope="col" style="color: blanchedalmond;">Avance Ejecu.</th>
             <th scope="col" style="color: blanchedalmond;">impacto</th>
-            <th scope="col" style="color: blanchedalmond;">punto critico</th>
+            
             <th scope="col" style="color: blanchedalmond;">accion </th>
             
           </tr>
@@ -57,9 +58,10 @@
             <td>{{dato.nom_actividad}}e</td>
             <td>{{dato.fecha_inicio}}</td>
             <td>{{dato.fecha_fin}}</td>
-            <td>{{dato.fecha_real}}</td>
+            <td>{{dato.avance_programado}}</td>
+            <td>{{dato.avance_ejecutado}}</td>
             <td>{{dato.impacto}}</td>
-            <td>{{dato.punto_critico}}</td>
+           
             <td>
 
               <a class="btn btn-success" href="{% url 'gestion:editar_subActividad' dato.id object.id %}">editar</a>

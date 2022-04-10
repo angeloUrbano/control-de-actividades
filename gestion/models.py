@@ -41,6 +41,12 @@ STATE_CHOICES = (
 )
 
 
+REGION_CHOICES = (
+    ('CENTRAL', 'CENTRAL'),
+  
+)
+
+
 class User(AbstractUser):
     email = models.EmailField(unique=True)
     cedula = models.CharField(max_length=100 , blank=False, null= False)
@@ -111,11 +117,8 @@ class activ_principal(models.Model):
     num_actividades = models. IntegerField(blank=False, null=True)
     nom_actividades = models.TextField('Actividad a realizar',blank=False, null=True)
     indicadores = models.TextField(blank=True, null=False)
-    costo = models.FloatField('Costo de la actividad', blank=True, null=True)
-    avance_1 = models.FloatField('avance Programado',blank= True, null=True)
-    
     alcance = models.TextField('Alcance',blank=False , null=True)
-    region = models.CharField ('Region',max_length=100, blank=True, null= True)
+    region = models.CharField (choices=REGION_CHOICES, max_length=20 , blank=False, null= False)
     id_estado2 =  models.CharField(choices=STATE_CHOICES, max_length=20 , blank=False, null= False)
 
 
@@ -144,11 +147,12 @@ class  sud_actividad(models.Model):
     nom_actividad = models.CharField( max_length=500 ,   blank=False)
     fecha_inicio = models.DateField()
     fecha_fin = models.DateField()
-    fecha_real = models.DateField()
-    impacto = models.CharField( max_length=500, blank=False, null= True)
+    avance_programado = models.FloatField('avance',blank= False, null=False)
+    avance_ejecutado = models.FloatField('avance',blank= False, null=False)
+    impacto = models.TextField( max_length=500, blank=False, null= True)
     punto_critico = models.CharField( max_length=500 , blank= False, null=True) 
     id_activ = models.ForeignKey(activ_principal, blank=True, null=True, on_delete=models.CASCADE)
-    estado = models.BooleanField(default=True)
+    estado = models.CharField(choices=STATE_CHOICES, max_length=20 , blank=False, null= False)
     def  __str__(self):
         return self.nom_actividad
 

@@ -11,6 +11,29 @@
  *
  * Date: 2021-03-02T17:08Z
  */
+function llenar() {
+
+	var selector = document.getElementById("fechas");
+
+	var anio =1985;
+
+	
+
+	
+	while (anio<=2055) {
+		selector.option[anio] = new Option('texto' , 'valor :' + anio);
+	
+		anio+=1
+
+	}
+
+	
+}
+
+
+
+
+
 ( function( global, factory ) {
 
 	"use strict";

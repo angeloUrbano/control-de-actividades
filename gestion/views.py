@@ -3,6 +3,9 @@ from django import forms
 from django.http import request
 from django.shortcuts import redirect, render
 from django.urls import reverse
+import os
+from datetime import date
+from datetime import datetime
 
 from django.views.generic.edit import DeleteView, UpdateView
 from openpyxl.styles.fills import FILL_NONE
@@ -22,6 +25,7 @@ from django.urls import  reverse_lazy
 
 from  openpyxl import Workbook, workbook
 from openpyxl.styles import  PatternFill, Border, Side, Alignment, Protection, Font, alignment
+from openpyxl.drawing.image import Image
 from django.http.response import HttpResponse, StreamingHttpResponse
 from django.contrib import messages
 
@@ -215,9 +219,7 @@ class signup (View):
 					"""
   
 
-class muestra (TemplateView):
 
-	template_name="corp/registro2.html"
 
 
 
@@ -231,10 +233,44 @@ class crear_actividad (CreateView):
 
 
 
+
+	def post(self , request , *args , **kwargs):
+		form  = self.form_class(request.POST)
+		queryset= User.objects.all()
+
+		#asi se puede acceder a los grupos
+		dato =0 
+		for x in queryset:
+			if x.groups.filter(user=self.request.user.id):
+				dato = x.groups.filter(user=self.request.user.id)
+
+		"""con el for de arriba guardo en la variable dato  un queryset o diccionario que contiene
+		el  gupo al que pertenece el usuario y en 
+		el siguiente for lo recorro para acceder a ese nombre y trabajarlo en la condicional de abajo"""
+
+		nombre__de_grupo ="" 
+		if dato !=0:
+			for x in dato:
+				nombre__de_grupo = x.name			
+
+		if form.is_valid():
+
+			estado_usuario = self.request.user.estado
+
+			if nombre__de_grupo == "nivel1" and estado_usuario != form.cleaned_data['id_estado2']:
+				messages.error(request, "Solo tiene permitido agregar actividades correspondientes al estado que usted pertenece") 
+				return render(request , self.template_name , {'form':form})
+			form.save()
+
+			return redirect('gestion:lista_actividades')
+
+		return render(request , self.template_name , {'form':form})
+
+
 class crear_sud_actividad(View):
    
 	model =  sud_actividad
-	second_model= activ_principal
+	second_model = activ_principal
 	template_name = "corp/registro1.html"
 	form_class =  sud_actividadForm2
 	success_url = reverse_lazy('gestion:lista_actividades')
@@ -271,14 +307,18 @@ class crear_sud_actividad(View):
 			#creo un objeto de mi modelo para usarlo para guardar 
 			sub_actividad_guuardar = self.model()
 
+			variable = self.get_object()
+
 			#accedo a las propiedades de mi objeto
 			sub_actividad_guuardar.num_actividad = formulario_limpio['num_actividad']
 			sub_actividad_guuardar.nom_actividad= formulario_limpio['nom_actividad']
 			sub_actividad_guuardar.fecha_inicio = formulario_limpio['fecha_inicio']
 			sub_actividad_guuardar.fecha_fin = formulario_limpio['fecha_fin']
-			sub_actividad_guuardar.fecha_real = formulario_limpio['fecha_real']
+			sub_actividad_guuardar.estado = variable.id_estado2
 			sub_actividad_guuardar.impacto = formulario_limpio['impacto']
 			sub_actividad_guuardar.punto_critico = formulario_limpio['punto_critico']
+			sub_actividad_guuardar.avance_programado = formulario_limpio['avance_programado']
+			sub_actividad_guuardar.avance_ejecutado = formulario_limpio['avance_ejecutado']
 			sub_actividad_guuardar.id_activ = self.get_object()
 
 			sub_actividad_guuardar.save()
@@ -331,7 +371,7 @@ class lista_actividades(ListView):
 		
 		variable = self.request.user.estado
 
-		if self.request.user.is_staff:
+		if self.request.user.is_staff or variable == "Aragua" :
 			consulta = self.model.objects.all()
 			
 		else:
@@ -543,14 +583,57 @@ class eliminar_Usuario( DeleteView):
 
 
 
+class genera_reporte (TemplateView):
 
+	template_name="corp/genera_reporte.html"
 
 class reporte_excel(TemplateView):
 
 	def get(self , request , *args , **kwargs):
-		
-		
 
+	
+		#query = Order.objects.filter(ordered_date__range=[dato, dato2])
+		if request.GET.get("customCheck1"):
+			print("activo primer checkbox")
+
+			anio = int(request.GET.get("prueba2")) 
+			primera_fecha = datetime(anio , 1 , 1)
+			segunda_fecha = datetime(anio , 4 , 30)
+
+			print(primera_fecha ,  segunda_fecha)
+			
+		else:
+			if 	request.GET.get("customCheck2"):
+				print("activo segundo checkbox")
+				anio = int(request.GET.get("prueba2")) 
+				primera_fecha = datetime(anio , 5 , 1)
+				segunda_fecha = datetime(anio , 8 , 31)
+
+				print(primera_fecha ,  segunda_fecha)
+				
+			else:
+				if request.GET.get("customCheck3"):
+					print("activo tercero checkbox")
+					anio = int(request.GET.get("prueba2")) 
+					primera_fecha = datetime(anio , 9 , 1)
+					segunda_fecha = datetime(anio , 12 , 31)
+
+					print(primera_fecha ,  segunda_fecha)
+				else:
+					if request.GET.get("customCheck4"):
+						print("activo cuarto checkbox")
+						anio = int(request.GET.get("prueba2")) 
+						primera_fecha = datetime(anio , 1 , 1)
+						segunda_fecha = datetime(anio , 12 , 31)
+
+						print(primera_fecha ,  segunda_fecha)
+
+
+
+		
+		
+		"""currentDir= os.path.abspath(os.path.dirname(__file__)) 
+		filepath=os.path.join(currentDir,"panaderiaG.jpg")
 		#if not dato and not dato2:
 		query = activ_principal.objects.all()
 
@@ -559,6 +642,11 @@ class reporte_excel(TemplateView):
 		#bandera = True
 		
 		controlador = 4
+
+
+		img = Image(filepath)
+		ws.add_image(img, 'A1')
+		wb.save('panaderiaG.jpg.xlsx')
 		
 		
 		#print(sheet.colum)
@@ -574,20 +662,21 @@ class reporte_excel(TemplateView):
 
 		ws.merge_cells('B1:E1')
 
-		ws.row_dimensions[1].height = 25
+		ws.row_dimensions[1].height = 50
+		ws.row_dimensions[3].height = 30
 
-		ws.column_dimensions['B'].width = 20
-		ws.column_dimensions['C'].width = 20
-		ws.column_dimensions['D'].width = 20
-		ws.column_dimensions['E'].width = 20
-		ws.column_dimensions['F'].width = 20
-		ws.column_dimensions['G'].width = 20
-		ws.column_dimensions['H'].width = 20
-		ws.column_dimensions['I'].width = 25
-		ws.column_dimensions['J'].width = 25
+		ws.column_dimensions['B'].width = 30
+		ws.column_dimensions['C'].width = 30
+		ws.column_dimensions['D'].width = 30
+		ws.column_dimensions['E'].width = 30
+		ws.column_dimensions['F'].width = 30
+		ws.column_dimensions['G'].width = 30
+		ws.column_dimensions['H'].width = 30
+		ws.column_dimensions['I'].width = 30
+		ws.column_dimensions['J'].width = 30
 
-		ws.column_dimensions['K'].width = 20
-		ws.column_dimensions['L'].width = 20
+		ws.column_dimensions['K'].width = 30
+		ws.column_dimensions['L'].width = 30
 		
 		
 		
@@ -688,8 +777,8 @@ class reporte_excel(TemplateView):
 
 		cont= 1
 		for q in query:
-			print(q.avance_1 , "avanceeeeeee")
-			print(type(q.avance_1) , "avanceeeeeee")
+			ws.row_dimensions[controlador].height = 30
+			
 			
 
 			
@@ -727,7 +816,7 @@ class reporte_excel(TemplateView):
 			ws.cell(row = controlador, column = 5).font = Font(name = 'Calibri', size = 8)
 			ws.cell(row = controlador, column = 5).fill = PatternFill(start_color = '949aa6', end_color = '949aa6', fill_type = "solid")
 
-			ws.cell(row = controlador, column = 5).value = "CENTRAL"
+			ws.cell(row = controlador, column = 5).value = q.region
 
 
 
@@ -760,6 +849,16 @@ class reporte_excel(TemplateView):
 			ws.cell(row = controlador, column = 8).value = ""
 
 
+			calculo del promedio de avance programado 
+			query4 = sud_actividad.objects.filter(id_activ = q.id)
+
+			suma=0
+			for datos in query4:
+				suma+=datos.avance_programado
+
+		
+			calculo_avance_programado =	suma/len(query4)
+			con_dos_decimales_calculo_avance_programado = round(calculo_avance_programado, 2)
 
 
 
@@ -769,8 +868,27 @@ class reporte_excel(TemplateView):
 			ws.cell(row = controlador, column = 9).font = Font(name = 'Calibri', size = 8)
 			ws.cell(row = controlador, column = 9).fill = PatternFill(start_color = '949aa6', end_color = '949aa6', fill_type = "solid")
 
-			ws.cell(row = controlador, column = 9).value = q.avance_1	
+			ws.cell(row = controlador, column = 9).value = con_dos_decimales_calculo_avance_programado
+
 			
+			
+			
+			
+			
+			 calculo del promedio de avance ejecutado 
+			query3 = sud_actividad.objects.filter(id_activ = q.id)
+
+			suma=0
+			for datos in query3:
+				suma+=datos.avance_ejecutado
+
+	
+			calculo_avance_ejecutado =	suma/len(query3)
+			con_dos_decimales_calculo_avance_ejecutado = round(calculo_avance_ejecutado, 2)
+
+
+
+
 
 			ws.cell(row = controlador, column = 10).alignment = Alignment(horizontal = "center")
 			ws.cell(row = controlador, column = 10).border = Border(left = Side(border_style = "thin"), right = Side(border_style = "thin"),
@@ -778,7 +896,7 @@ class reporte_excel(TemplateView):
 			ws.cell(row = controlador, column = 10).font = Font(name = 'Calibri', size = 8)
 			ws.cell(row = controlador, column = 10).fill = PatternFill(start_color = '949aa6', end_color = '949aa6', fill_type = "solid")
 
-			ws.cell(row = controlador, column = 10).value = "CALCULO"
+			ws.cell(row = controlador, column = 10).value = con_dos_decimales_calculo_avance_ejecutado
 
 
 
@@ -806,7 +924,9 @@ class reporte_excel(TemplateView):
 			query2 = sud_actividad.objects.filter(id_activ = q.id)
 			
 			for datos in query2:
+
 				controlador+=1
+				ws.row_dimensions[controlador].height = 50
 				
 				ws.cell(row = controlador , column = 2).alignment = Alignment(horizontal = "center")
 				ws.cell(row = controlador , column = 2).border = Border(left = Side(border_style = "thin"), right = Side(border_style = "thin"),
@@ -860,16 +980,16 @@ class reporte_excel(TemplateView):
 				ws.cell(row = controlador, column = 9).border = Border(left = Side(border_style = "thin"), right = Side(border_style = "thin"),
 										top = Side(border_style = "thin"), bottom = Side(border_style = "thin") )
 				ws.cell(row = controlador, column = 9).font = Font(name = 'Calibri', size = 8)
-				ws.cell(row = controlador, column = 9).value = "0.00%"
+				ws.cell(row = controlador, column = 9).value = datos.avance_programado
 
 				ws.cell(row = controlador, column = 10).alignment = Alignment(horizontal = "center")
 				ws.cell(row = controlador, column = 10).border = Border(left = Side(border_style = "thin"), right = Side(border_style = "thin"),
 										top = Side(border_style = "thin"), bottom = Side(border_style = "thin") )
 				ws.cell(row = controlador, column = 10).font = Font(name = 'Calibri', size = 8)
-				ws.cell(row = controlador, column = 10).value = "0.00%"
+				ws.cell(row = controlador, column = 10).value = datos.avance_ejecutado
 
 
-				ws.cell(row = controlador, column = 11).alignment = Alignment(horizontal = "center")
+				ws.cell(row = controlador, column = 11).alignment = Alignment(vertical = "distributed" )
 				ws.cell(row = controlador, column = 11).border = Border(left = Side(border_style = "thin"), right = Side(border_style = "thin"),
 										top = Side(border_style = "thin"), bottom = Side(border_style = "thin") )
 				ws.cell(row = controlador, column = 11).font = Font(name = 'Calibri', size = 8)
@@ -896,6 +1016,11 @@ class reporte_excel(TemplateView):
 		response['Content-Disposition'] = contenido
 		wb.save(response)
 		return response	
+"""
+
+
+
+
 
 
 	 

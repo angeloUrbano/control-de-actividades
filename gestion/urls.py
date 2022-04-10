@@ -3,9 +3,12 @@ from django.urls import  path
 from .views import *
 
 
-
+reporte_excel
 
 urlpatterns = [
+
+    path("genera_reportes/", genera_reporte.as_view(), name="genera_reportes"),
+    path("reporte/", reporte_excel.as_view(), name="reporte"),
     
      path("prueba/", crear_actividad.as_view(), name="prueba"),
     
