@@ -326,18 +326,19 @@ class activ_principalForm(forms.ModelForm):
 
 		model=activ_principal
 
-		fields=['num_actividades','nom_actividades','indicadores','alcance','region', 'id_estado2']
+		fields=['num_actividades','nom_actividades','indicadores','alcance','region', 'id_estado2'  , 'creado']
 
  
 
 	
 		labels={
-			'num_actividades':'Nro  Actividad',
-			'nom_actividades': 'Nom Actividad',
+			'num_actividades':'Numero  Actividad',
+			'nom_actividades': 'Nombre Actividad',
 			'indicadores' :'Indicadores',
 			'alcance': 'Alcance',
 			'region':'Region',
-			'id_estado2':'Estado'
+			'id_estado2':'Estado',
+			'creado' : 'Fecha de creacion de actividad'
 		}
 			
 				
@@ -351,7 +352,7 @@ class activ_principalForm(forms.ModelForm):
 		'num_actividades': forms.NumberInput(attrs={'class':'form-control'}),
 		'nom_actividades': forms.TextInput(attrs={'class':'form-control'}),
 		'indicadores': forms.TextInput(attrs={'class':'form-control'}),
-		
+		'creado': forms.DateInput(attrs={'type':'date' , 'class':'form-control'}),
 		
 		'alcance':forms.TextInput(attrs={'class':'form-control'}),
 		'region':forms.Select(attrs={'class':'form-control'}),
@@ -365,20 +366,50 @@ class activ_principalForm(forms.ModelForm):
   
 
 
-class sud_actividadForm(forms.Form):
+#este lo uso en editar 
+class sud_actividadForm(forms.ModelForm):
 
-	num_actividad = forms.FloatField()
 
-	nom_actividad = forms.CharField()
+	class Meta:
 
-	fecha_inicio = forms.DateField()
-	fecha_fin = forms.DateField()
-	
-	impacto =forms.CharField(max_length=500 , required=False)
-	punto_critico = forms.CharField(max_length=500 , required=False)
+		model= sud_actividad
+		fields= ['num_actividad','nom_actividad','fecha_inicio','fecha_fin', 'fecha_fin_real','impacto','punto_critico' ,  'avance_programado' , 'avance_ejecutado']
 
-	nom_actividad.widget.attrs.update({'class':'form-control'})
-	
+
+
+
+		labels={
+
+			'Num actividad':'num_actividad',
+			'Nombre actividad':'nom_actividad',
+			'fecha inicio': 'fecha_inicio',
+			'fecha fin': 'fecha_fin',
+			'fecha fin real': 'fecha_fin_real',
+			'impacto':'impacto',
+			'punto critico':'punto_critico',
+			'avance_programado':'Avance Programado',
+			'avance_ejecutado' : 'Avance Ejecutado'
+			
+
+		}
+
+		widgets = {
+			
+			'num_actividad': forms.NumberInput(attrs={'class':'form-control'}),
+			'nom_actividad':forms.TextInput(attrs={'class':'form-control'}),
+			'fecha_inicio': forms.DateInput(attrs={'type':'date' , 'class':'form-control'}),
+			'fecha_fin': forms.DateInput(attrs={'type':'date' , 'class':'form-control'}),
+			'fecha_fin_real': forms.DateInput(attrs={'type':'date' , 'class':'form-control'}),
+			'impacto':forms.Textarea(attrs={'class':'form-control'}),
+			'punto_critico':forms.TextInput(attrs={'class':'form-control'}),
+			'avance_programado': forms.NumberInput(attrs={'class':'form-control'}),
+			'avance_ejecutado' :forms.NumberInput(attrs={'class':'form-control'}),
+			
+
+		}
+
+
+
 
 	def clean_nom_actividad(self):
 
@@ -417,40 +448,13 @@ class sud_actividadForm(forms.Form):
 			raise forms.ValidationError("debe ser solo letras")
 
 		
-		return punto_critico				
-		
-	#valido fecha inicio
-	def clean_fecha_inicio(self):
+		return punto_critico
 
-		fecha_inicio= self.cleaned_data.get('fecha_inicio')
-		fecha_actual = date.today()
+
+
+
 		
 
-		if  fecha_inicio < fecha_actual :
-
-			raise ValidationError("Debe ingresar una fecha correcta")
-
-		return fecha_inicio	
-
-
-	#valido fecha fin 
-
-	def clean_fecha_fin(self):
-
-		fecha_inicio= self.cleaned_data.get('fecha_inicio')
-		fecha_fin= self.cleaned_data.get('fecha_fin')
-		
-
-		fecha_actual = date.today()
-	
-
-		if fecha_fin == fecha_actual or fecha_fin < fecha_actual or fecha_fin == fecha_inicio:
-
-			raise ValidationError("Debe ingresar una fecha correcta")
-
-		return fecha_fin
-
-	#valido fecha fin  real
 
 	
 

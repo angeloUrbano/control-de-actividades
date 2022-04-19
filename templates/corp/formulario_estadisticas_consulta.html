@@ -1,0 +1,164 @@
+{% extends "corpoelec.html" %}
+
+
+
+{% block titulo %}
+
+    <title> Actividades </title>
+    
+ {% endblock titulo %}}
+
+{%block content%}
+
+
+<div class="row justify-content-md-center ">
+  <div class="col-sm-6">
+    <div class="card">
+<div class="card">
+  
+  <div class="card-body">
+    <h3 style="text-align: center; background-color: rgb(0, 68, 255); color:black;" class="card-header">Graficas</h3>
+    <p class="card-text">
+      
+    </p>
+    
+    
+    
+     
+  
+<form  action="{% url 'gestion:muestra_graficas' %}" id="form_nombre">
+
+
+    <label for="">seleccionar el año para la comparacion </label>
+    <select class="custom-select"  name="prueba1" id ="mySelect1" >
+        <option value="">Seleccionar</option>
+        <option value="2022">2022</option>
+        <option value="2023">2023</option>
+        <option value="2024">2024</option>
+        <option value="2025">2025</option>
+        <option value="2026">2026</option>
+        <option value="2027">2027</option>
+        <option value="2028">2028</option>
+        <option value="2029">2029</option>
+        <option value="2030">2030</option>
+        <option value="2031">2031</option>
+        <option value="2032">2032</option>
+        <option value="2033">2033</option>
+        <option value="2034">2034</option>
+        <option value="2035">2035</option>
+        <option value="2036">2036</option>
+        <option value="2037">2037</option>
+        <option value="2038">2038</option>
+        <option value="2039">2039</option>
+        <option value="2040">2040</option>
+       
+    
+        
+    
+    </select>
+
+
+<label for="">seleccionar el año para la comparacion</label>
+<select class="custom-select"  name="prueba2" id ="mySelect" >
+    <option value="">Seleccionar</option>
+    <option value="2022">2022</option>
+    <option value="2023">2023</option>
+    <option value="2024">2024</option>
+    <option value="2025">2025</option>
+    <option value="2026">2026</option>
+    <option value="2027">2027</option>
+    <option value="2028">2028</option>
+    <option value="2029">2029</option>
+    <option value="2030">2030</option>
+    <option value="2031">2031</option>
+    <option value="2032">2032</option>
+    <option value="2033">2033</option>
+    <option value="2034">2034</option>
+    <option value="2035">2035</option>
+    <option value="2036">2036</option>
+    <option value="2037">2037</option>
+    <option value="2038">2038</option>
+    <option value="2039">2039</option>
+    <option value="2040">2040</option>
+   
+
+	
+
+</select>
+
+
+
+
+    
+  <button   style="border-radius: 15px; text-align: center; font-family: cursive" class="btn btn-success btn-block mt-5" type="submit">Generar graficas</button>
+
+  
+</form> 
+
+
+ 
+
+
+
+
+
+</div>
+</div>
+ </div>
+</div>
+  </div>
+</div>
+
+</div>
+</div>
+
+
+
+<script>
+
+
+var form = document.getElementById("form_nombre");
+
+form.addEventListener("submit" , function(event) {
+	
+	
+	var dato1 = $("#mySelect1").val()
+	var dato2 = $("#mySelect").val()
+    
+    
+  
+
+    
+	
+	
+    condicion_envio = true
+
+    if (dato1=="" || dato2=="") {
+        condicion_envio = false
+    }
+
+
+	
+
+	 if (condicion_envio == false) {
+	 	event.preventDefault();
+	 alert("Debe seleccionar ambas fehcas para la consulta");	
+	 }
+	
+	
+})
+
+
+
+
+</script>
+
+
+
+
+
+  
+{%endblock content%}
+
+
+

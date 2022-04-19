@@ -37,15 +37,17 @@ from django.contrib import messages
 
 from django.contrib.auth.mixins import PermissionRequiredMixin
 
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 
-	 
+
+
 	  
 
 def login_view(request):
 	
-	print(request.POST)
+	
 	if request.method== 'POST':
 		
 		
@@ -54,7 +56,7 @@ def login_view(request):
 	
 		User = authenticate( username=username, password = password)
 		
-		print(User)
+		
 		if User :
 			
 			login(request , User)
@@ -76,11 +78,13 @@ def logout_view(request):
 
 
 
-class crear_usuario(View):
+class crear_usuario( LoginRequiredMixin , validarPermisosRequeridosMixin , View):
+	permission_required = 'gestion.add_user' 
 
    
 	template_name = 'corp/signup.html'
 	form_class = Crea_Usuario
+
 
 
 
@@ -96,7 +100,7 @@ class crear_usuario(View):
 		
 
 		if form.is_valid():
-			print("aquiii ya pase el formularo valido")
+			
 
 		 
 
@@ -180,7 +184,7 @@ class signup (View):
 
 		if password != password_confirmation:
 
-			print('contraseña')
+			
 
 			return render (request, 'corp/signup.html', {'error': 'Contraseñas no coinciden'})
 		
@@ -197,9 +201,9 @@ class signup (View):
 		  User.save()
 
 
-		  print("!!!!!!!!!!!!!!!!!! porque no se guarda!!!!!!!!!!!!!!")
+
 		  profile= Profile( user=User, nombre=nombre , apellido=apellido , email=email, region=region, nivel=nivel)
-		  print("!!!!!!!!!!!!!!!!se guardo!!!!!!!!!!!!!!!!")
+		 
 		  profile.save
 
 		  return redirect('login')
@@ -226,7 +230,7 @@ class signup (View):
 
 
 
-class crear_actividad (CreateView):
+class crear_actividad (LoginRequiredMixin , CreateView):
    
   
 	model = activ_principal
@@ -270,7 +274,7 @@ class crear_actividad (CreateView):
 		return render(request , self.template_name , {'form':form})
 
 
-class crear_sud_actividad(View):
+class crear_sud_actividad(LoginRequiredMixin , View):
    
 	model =  sud_actividad
 	second_model = activ_principal
@@ -334,7 +338,7 @@ class crear_sud_actividad(View):
 			return redirect(url)
 
 		
-		print(form.errors)
+		
 			
 		return render(request, 'corp/editar_subActividad.html' , {'form':form , 'object': self.get_object})
 		
@@ -364,7 +368,7 @@ class crear_sud_actividad(View):
 
 
 
-class lista_actividades(ListView):
+class lista_actividades(LoginRequiredMixin , ListView):
 	
 	model = activ_principal
 	template_name = "corp/listar_actividad.html"
@@ -377,10 +381,10 @@ class lista_actividades(ListView):
 		variable = self.request.user.estado
 
 		if self.request.user.is_staff or variable == "Aragua" :
-			consulta = self.model.objects.all()
+			consulta = self.model.objects.all().order_by('-creado')
 			
 		else:
-			consulta = self.model.objects.filter(id_estado2=variable)
+			consulta = self.model.objects.filter(id_estado2=variable).order_by('-creado')
 
 		
 		
@@ -392,7 +396,7 @@ class lista_actividades(ListView):
 
 
 
-class editar_actividad(UpdateView):
+class editar_actividad(LoginRequiredMixin , UpdateView):
 	model= activ_principal
 	form_class =  activ_principalForm
 	template_name="corp/modal_editar_actividad.html"
@@ -401,7 +405,7 @@ class editar_actividad(UpdateView):
 	
 
 #validarPermisosRequeridosMixin es un validador de permisos creado por mi y esta en Mixins.py
-class eliminar_actividad(validarPermisosRequeridosMixin , DeleteView):
+class eliminar_actividad( LoginRequiredMixin , validarPermisosRequeridosMixin , DeleteView):
 	permission_required = 'gestion.delete_activ_principal'
 	model = activ_principal
 
@@ -410,7 +414,7 @@ class eliminar_actividad(validarPermisosRequeridosMixin , DeleteView):
 
 
 
-class detalle_actividad(DetailView):
+class detalle_actividad(LoginRequiredMixin , DetailView):
 	second_model = sud_actividad
    
 	template_name= 'corp/detalle_actvidad.html'
@@ -436,10 +440,10 @@ class detalle_actividad(DetailView):
 		return context
 
 
-class editar_sub_actividad(UpdateView):
+class editar_sub_actividad(LoginRequiredMixin , UpdateView):
 
 	model= sud_actividad
-	form_class = sud_actividadForm2   
+	form_class = sud_actividadForm   
 	template_name="corp/editar_subActividad.html"
 	def post(self , request , *args , **kwargs):
 
@@ -459,7 +463,7 @@ class editar_sub_actividad(UpdateView):
 	
 
 #validarPermisosRequeridosMixin es un validador de permisos creado por mi y esta en Mixins.py 
-class eliminar_sub_Actividad(validarPermisosRequeridosMixin , DeleteView):
+class eliminar_sub_Actividad(LoginRequiredMixin , validarPermisosRequeridosMixin , DeleteView):
 	permission_required = 'gestion.delete_sud_actividad'
 	model = sud_actividad
 	template_name="corp/eliminar_subActividad.html"
@@ -482,15 +486,15 @@ class eliminar_sub_Actividad(validarPermisosRequeridosMixin , DeleteView):
 
 
 
-class listar_user(ListView):
+class listar_user( LoginRequiredMixin , validarPermisosRequeridosMixin , ListView):
+	permission_required =   'gestion.view_user'
 
 	model = User
 	template_name = 'corp/lista_user.html'
 
 
-class detalle_Usuario(DetailView):
-   
-   
+class detalle_Usuario(LoginRequiredMixin ,  DetailView):
+
 	template_name= 'corp/detalle_usuario.html'
 	pk_url_kwargs= 'pk'	
 	queryset= User.objects.all()
@@ -515,13 +519,15 @@ class detalle_Usuario(DetailView):
 			
 			dato = x.password
 
-		print(dato)         
+		       
 	   
 	   #context['object2']= User.groups.filter(user_id=1).exists()
 		
 		return context
 
-class editar_usuario(UpdateView):
+class editar_usuario(LoginRequiredMixin , validarPermisosRequeridosMixin , UpdateView):
+	permission_required =   'gestion.change_user'   
+
 	model= User
 	form_class =  update_Usuario
 	template_name ='corp/editar_usuario.html'
@@ -548,7 +554,9 @@ class editar_usuario(UpdateView):
 
 
 
-class editar_contraseña_usuario(UpdateView):
+class editar_contraseña_usuario( LoginRequiredMixin , validarPermisosRequeridosMixin , UpdateView):
+	permission_required =   'gestion.change_user'   
+
 	model= User
 	form_class =  update_contraseña_Usuario
 	template_name ='corp/editarcontraseña_usuario.html'
@@ -562,7 +570,7 @@ class editar_contraseña_usuario(UpdateView):
 		instancia = self.model.objects.get(id=self.kwargs['pk'])
 		form = self.form_class(request.POST , instance=instancia)
 		if form.is_valid():
-			print(form.cleaned_data.get('password1'))
+			
 			
 			instancia.set_password(form.cleaned_data.get('password'))
 
@@ -578,7 +586,9 @@ class editar_contraseña_usuario(UpdateView):
 
 
 
-class eliminar_Usuario( DeleteView):
+class eliminar_Usuario(LoginRequiredMixin , validarPermisosRequeridosMixin , DeleteView):
+	permission_required =   'gestion.delete_user' 
+
    
 	model = User
 
@@ -588,13 +598,17 @@ class eliminar_Usuario( DeleteView):
 
 
 
-class genera_reporte (TemplateView):
+class genera_reporte ( LoginRequiredMixin , TemplateView):
 
 	template_name="corp/genera_reporte.html"
 
-class reporte_excel(TemplateView):
+class reporte_excel( LoginRequiredMixin ,  TemplateView):
 
 	def get(self , request , *args , **kwargs):
+
+
+		#variable utilizada como almacen de ese dato que describe el nombre de la variable 
+		variable_calculo_porcentaje_total =0
 
 
 		variable = self.request.user.estado
@@ -901,17 +915,20 @@ class reporte_excel(TemplateView):
 
 			ws.cell(row = controlador, column = 8).value = ""
 
-
 			#calculo del promedio de avance programado 
-			query4 = sud_actividad.objects.filter(id_activ = q.id)
+			try:
+				query4 = sud_actividad.objects.filter(id_activ = q.id)
 
-			suma=0
-			for datos in query4:
-				suma+=datos.avance_programado
+				suma=0
+				for datos in query4:
+					suma+=datos.avance_programado
 
 		
-			calculo_avance_programado =	suma/len(query4)
-			con_dos_decimales_calculo_avance_programado = round(calculo_avance_programado, 2)
+				calculo_avance_programado =	suma/len(query4)
+				con_dos_decimales_calculo_avance_programado = round(calculo_avance_programado, 2)
+
+			except:		
+				con_dos_decimales_calculo_avance_programado = ""
 
 
 
@@ -928,16 +945,23 @@ class reporte_excel(TemplateView):
 			
 			
 			
-			 #calculo del promedio de avance ejecutado 
-			query3 = sud_actividad.objects.filter(id_activ = q.id)
+			#calculo del promedio de avance ejecutado
+			try:
 
-			suma=0
-			for datos in query3:
-				suma+=datos.avance_ejecutado
+				query3 = sud_actividad.objects.filter(id_activ = q.id)
 
-	
-			calculo_avance_ejecutado =	suma/len(query3)
-			con_dos_decimales_calculo_avance_ejecutado = round(calculo_avance_ejecutado, 2)
+				suma=0
+				for datos in query3:
+					suma+=datos.avance_ejecutado
+
+		
+				calculo_avance_ejecutado =	suma/len(query3)
+				con_dos_decimales_calculo_avance_ejecutado = round(calculo_avance_ejecutado, 2)
+
+				variable_calculo_porcentaje_total += con_dos_decimales_calculo_avance_ejecutado 	
+			except:
+				con_dos_decimales_calculo_avance_programado = ""
+
 
 
 
@@ -1058,7 +1082,36 @@ class reporte_excel(TemplateView):
 				
 
 			controlador +=1
-			
+
+
+		controlador+=1
+
+		ws.cell(row = controlador, column = 9).alignment = Alignment(horizontal = "center")
+		ws.cell(row = controlador, column = 9).border = Border(left = Side(border_style = "thin"), right = Side(border_style = "thin"),
+									top = Side(border_style = "thin"), bottom = Side(border_style = "thin") )
+		ws.cell(row = controlador, column = 9).font = Font(name = 'Calibri', size = 11)
+		ws.cell(row = controlador, column = 9).fill = PatternFill(start_color = 'ed0909', end_color = 'ed0909', fill_type = "solid")
+
+		ws.cell(row = controlador, column = 9).value = "Porcentaje de cumplimiento total:"
+
+		""" DE AQUI SALE EL CALCULO FINAOL DEL PORCENTAJE DE TODAS LAS ACTIVIDADES 
+		MOSTRADAS EN EL REPORTE"""
+
+
+
+		resultado_final = variable_calculo_porcentaje_total/len(query)
+		redondeo =  round(resultado_final, 2)
+		
+
+		ws.cell(row = controlador, column = 10).alignment = Alignment(horizontal = "center")
+		ws.cell(row = controlador, column = 10).border = Border(left = Side(border_style = "thin"), right = Side(border_style = "thin"),
+									top = Side(border_style = "thin"), bottom = Side(border_style = "thin") )
+		ws.cell(row = controlador, column = 10).font = Font(name = 'Calibri', size = 10)
+		ws.cell(row = controlador, column = 10).fill = PatternFill(start_color = 'ed0909', end_color = 'ed0909', fill_type = "solid")
+
+		ws.cell(row = controlador, column = 10).value = redondeo
+
+
 
 		#establecer nombre de archivo
 
@@ -1071,6 +1124,116 @@ class reporte_excel(TemplateView):
 		return response	
 
 
+
+class muestra_grafica( LoginRequiredMixin , View):
+	model= activ_principal
+	template_name="corp/muestra_grafica.html"
+
+
+
+	def get(self , request , *args , **kwargs):
+
+
+		primer_anio = request.GET.get('prueba1')
+		segundo_anio = request.GET.get('prueba2')
+		print( primer_anio ,  segundo_anio )
+
+		
+		query = self.model.objects.filter(creado__year = primer_anio)
+
+		lista_de_porcentaje_por_anio= []
+		try:
+			for q in query:
+
+
+				query3 = sud_actividad.objects.filter(id_activ = q.id)
+				suma=0
+				for datos in query3:
+					suma+=datos.avance_ejecutado
+
+			
+				calculo_avance_ejecutado =	suma/len(query3)
+				con_dos_decimales_calculo_avance_ejecutado = round(calculo_avance_ejecutado, 2)
+				lista_de_porcentaje_por_anio.append(con_dos_decimales_calculo_avance_ejecutado)
+		except:
+			pass
+
+		
+
+		suma = 0
+		if len(lista_de_porcentaje_por_anio)!=0:
+			for datos in lista_de_porcentaje_por_anio:
+				suma+=datos
+
+			resultado_para_grafica =  suma/len(lista_de_porcentaje_por_anio)
+			calculo_avance_ejecutado = round(resultado_para_grafica, 2)
+			print(lista_de_porcentaje_por_anio)
+
+			anio_2022 = {'anio_2022':calculo_avance_ejecutado}
+			anio_2022['nombre1'] = primer_anio
+		else:
+				anio_2022 = {'anio_2022':0}
+				anio_2022['nombre1'] = primer_anio
+
+
+
+
+
+
+	#-------------------------------------------------------
+		lista_de_porcentaje_por_anio2=[]
+		query2 = self.model.objects.filter(creado__year = segundo_anio)
+		
+		try:
+			for q in query2:
+
+
+				query4 = sud_actividad.objects.filter(id_activ = q.id)
+				suma2=0
+				
+				for datos in query4:
+					suma2+=datos.avance_ejecutado
+
+					
+				calculo_avance_ejecutado =	suma2/len(query4)
+				con_dos_decimales_calculo_avance_ejecutado = round(calculo_avance_ejecutado, 2)
+				
+				lista_de_porcentaje_por_anio2.append(con_dos_decimales_calculo_avance_ejecutado)
+		except:
+			pass
+
+		
+
+		if len(lista_de_porcentaje_por_anio2)!=0:
+			suma2 = 0
+			for datos in lista_de_porcentaje_por_anio2:
+				suma2+=datos
+
+			resultado_para_grafica =  suma2/len(lista_de_porcentaje_por_anio2)
+			calculo_avance_ejecutado = round(resultado_para_grafica, 2)
+			
+
+			anio_2022["segundo_anio"] = calculo_avance_ejecutado
+			anio_2022['nombre2'] = segundo_anio
+		else:
+			anio_2022["segundo_anio"] = 0
+			anio_2022['nombre2'] = segundo_anio
+
+	
+
+
+
+
+
+
+		
+		return render(request , self.template_name , {'anio_2022':anio_2022})
+
+
+
+class formulario_estadistica( LoginRequiredMixin , TemplateView):
+
+	template_name = "corp/formulario_estadisticas_consulta.html"
 
 
 

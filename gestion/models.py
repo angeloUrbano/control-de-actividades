@@ -120,7 +120,7 @@ class activ_principal(models.Model):
     alcance = models.TextField('Alcance',blank=False , null=True)
     region = models.CharField (choices=REGION_CHOICES, max_length=20 , blank=False, null= False)
     id_estado2 =  models.CharField(choices=STATE_CHOICES, max_length=20 , blank=False, null= False)
-    creado = models.DateTimeField(auto_now_add=True)
+    creado = models.DateTimeField(blank=False , null=True)
 
 
     

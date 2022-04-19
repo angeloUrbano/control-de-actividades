@@ -8,6 +8,11 @@ reporte_excel
 urlpatterns = [
 
     path("genera_reportes/", genera_reporte.as_view(), name="genera_reportes"),
+    path("muestra_graficas/", muestra_grafica.as_view(), name="muestra_graficas"),
+    path("frmulario_estadist/", formulario_estadistica.as_view(), name="frmulario_estadist"),
+ 
+
+
     path("reporte/", reporte_excel.as_view(), name="reporte"),
     
      path("prueba/", crear_actividad.as_view(), name="prueba"),
