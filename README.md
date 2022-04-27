@@ -6,6 +6,10 @@ login
 
 ![54fc006e-78c4-4e9f-b836-6e8220eb3c6a](https://user-images.githubusercontent.com/49767887/165641859-0c94db64-9d87-4d39-afa6-4b8d8ff40014.jpg)
 
+Paggina principal.
+
+![222f397c-44cc-4523-a7a7-3a0361b7204b](https://user-images.githubusercontent.com/49767887/165642332-edeca853-4183-489e-8dbf-a678b75505c7.jpg)
+
 ventanas modales
 ![2d323961-5374-45cb-aef8-1c0097830742](https://user-images.githubusercontent.com/49767887/165641891-7f373865-7f61-4529-bd77-12d7baa52f2b.jpg)
 
