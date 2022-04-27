@@ -2,7 +2,7 @@
 sistema de control de actividades elaborado con python, django , jquery , ajax , javascript , mysql  yBootstrap
 
 
-login
+login.
 
 ![54fc006e-78c4-4e9f-b836-6e8220eb3c6a](https://user-images.githubusercontent.com/49767887/165641859-0c94db64-9d87-4d39-afa6-4b8d8ff40014.jpg)
 
