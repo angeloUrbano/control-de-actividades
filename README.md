@@ -1,4 +1,5 @@
 # control-de-actividades
+#freelance
 sistema de control de actividades elaborado con python, django , jquery , ajax , javascript , mysql  yBootstrap
 
 
